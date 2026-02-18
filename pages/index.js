@@ -43,7 +43,7 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Auto-scroll to bottom when new message arrives
+  // Auto-scroll to bottom
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTo({
@@ -56,9 +56,9 @@ export default function Home() {
   return (
     <div style={styles.container}>
       <div style={styles.chatWrapper}>
-        {/* Chat messages */}
+        {/* Chat messages with column-reverse */}
         <div style={styles.chatContainer} ref={chatRef}>
-          {messages.map((msg, i) => (
+          {[...messages].reverse().map((msg, i) => (
             <div
               key={i}
               style={{
@@ -79,7 +79,7 @@ export default function Home() {
           )}
         </div>
 
-        {/* Input bar stays pinned at bottom */}
+        {/* Input bar */}
         <div style={styles.inputContainer}>
           <input
             style={styles.input}
@@ -118,12 +118,12 @@ const styles = {
     flex: 1,
     overflowY: "auto",
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "column-reverse", // 👈 makes new messages appear at bottom and grow upwards
     padding: "30px 20px",
     gap: "10px",
-    maskImage: "linear-gradient(to top, black 75%, transparent 100%)",
+    maskImage: "linear-gradient(to bottom, black 0%, transparent 20%)", // fade at top
     WebkitMaskImage:
-      "linear-gradient(to top, black 75%, transparent 100%)",
+      "linear-gradient(to bottom, black 0%, transparent 20%)",
   },
 
   message: {
