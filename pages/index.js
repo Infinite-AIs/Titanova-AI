@@ -56,9 +56,8 @@ export default function Home() {
   return (
     <div style={styles.container}>
       <div style={styles.chatWrapper}>
-        {/* Chat messages with column-reverse */}
         <div style={styles.chatContainer} ref={chatRef}>
-          {[...messages].reverse().map((msg, i) => (
+          {messages.map((msg, i) => (
             <div
               key={i}
               style={{
@@ -79,7 +78,6 @@ export default function Home() {
           )}
         </div>
 
-        {/* Input bar */}
         <div style={styles.inputContainer}>
           <input
             style={styles.input}
@@ -118,12 +116,13 @@ const styles = {
     flex: 1,
     overflowY: "auto",
     display: "flex",
-    flexDirection: "column-reverse", // 👈 makes new messages appear at bottom and grow upwards
+    flexDirection: "column",
+    justifyContent: "flex-end", // anchors messages visually to bottom
     padding: "30px 20px",
     gap: "10px",
-    maskImage: "linear-gradient(to bottom, black 0%, transparent 20%)", // fade at top
+    maskImage: "linear-gradient(to top, black 70%, transparent 100%)", // fade at top
     WebkitMaskImage:
-      "linear-gradient(to bottom, black 0%, transparent 20%)",
+      "linear-gradient(to top, black 70%, transparent 100%)",
   },
 
   message: {
