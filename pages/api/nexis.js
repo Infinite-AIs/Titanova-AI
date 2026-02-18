@@ -8,11 +8,13 @@ export default async function handler(req, res) {
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
       {
-        model: "llama3-8b-8192",
-        messages: [
-          { role: "user", content: prompt }
-        ]
-      },
+        {
+  model: "llama-3.1-8b-instant",
+  messages: [
+    { role: "user", content: prompt }
+  ]
+}
+
       {
         headers: {
           "Authorization": `Bearer ${API_KEY}`,
