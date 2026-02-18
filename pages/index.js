@@ -1,70 +1,136 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
-  const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const chatRef = useRef(null);
 
-  const handleSubmit = async () => {
-    if (!prompt) return;
+  const sendMessage = async () => {
+    if (!input.trim()) return;
 
+    const newMessages = [...messages, { role: "user", content: input }];
+    setMessages(newMessages);
+    setInput("");
     setLoading(true);
-    setResponse("");
 
     try {
       const res = await fetch("/api/nexis", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: input }),
       });
 
       const data = await res.json();
 
-      if (!res.ok) {
-       throw new Error(
-  typeof data.error === "string"
-    ? data.error
-    : JSON.stringify(data.error)
-);
-
-      }
-
-      setResponse(data.result);
+      setMessages([
+        ...newMessages,
+        { role: "assistant", content: data.result || "Error." }
+      ]);
     } catch (err) {
-      console.error(err);
-      setResponse("Error: " + err.message);
+      setMessages([
+        ...newMessages,
+        { role: "assistant", content: "Error connecting to Nexis." }
+      ]);
     }
 
     setLoading(false);
   };
 
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div style={{ padding: "2rem", fontFamily: "Arial" }}>
-      <h1>Nexis</h1>
+    <div style={styles.container}>
+      <div style={styles.chatContainer} ref={chatRef}>
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            style={{
+              ...styles.message,
+              alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+              backgroundColor:
+                msg.role === "user" ? "#2563eb" : "#1f2937",
+            }}
+          >
+            {msg.content}
+          </div>
+        ))}
 
-      <textarea
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        rows={4}
-        cols={50}
-        placeholder="Ask Nexis anything..."
-      />
+        {loading && (
+          <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
+            Nexis is thinking...
+          </div>
+        )}
+      </div>
 
-      <br />
-
-      <button
-        onClick={handleSubmit}
-        style={{ marginTop: "1rem", padding: "0.5rem 1rem" }}
-      >
-        {loading ? "Thinking..." : "Submit"}
-      </button>
-
-      <div style={{ marginTop: "1rem" }}>
-        <strong>Response:</strong>
-        <p>{response}</p>
+      <div style={styles.inputContainer}>
+        <input
+          style={styles.input}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Message Nexis..."
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+        />
+        <button style={styles.button} onClick={sendMessage}>
+          Send
+        </button>
       </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#0f172a",
+    color: "white",
+  },
+  chatContainer: {
+    flex: 1,
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column",
+    padding: "20px",
+    gap: "10px",
+    maskImage:
+      "linear-gradient(to top, black 70%, transparent 100%)",
+    WebkitMaskImage:
+      "linear-gradient(to top, black 70%, transparent 100%)",
+  },
+  message: {
+    padding: "12px 16px",
+    borderRadius: "18px",
+    maxWidth: "70%",
+    fontSize: "15px",
+    lineHeight: "1.4",
+  },
+  inputContainer: {
+    display: "flex",
+    padding: "15px",
+    borderTop: "1px solid #1e293b",
+    backgroundColor: "#0f172a",
+  },
+  input: {
+    flex: 1,
+    padding: "12px",
+    borderRadius: "12px",
+    border: "none",
+    outline: "none",
+    fontSize: "14px",
+    marginRight: "10px",
+  },
+  button: {
+    padding: "12px 18px",
+    borderRadius: "12px",
+    border: "none",
+    backgroundColor: "#2563eb",
+    color: "white",
+    cursor: "pointer",
+  },
+};
