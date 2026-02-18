@@ -43,19 +43,17 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom when new message arrives
   useEffect(() => {
     if (chatRef.current) {
-      chatRef.current.scrollTo({
-        top: chatRef.current.scrollHeight,
-        behavior: "smooth",
-      });
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [messages]);
 
   return (
     <div style={styles.container}>
       <div style={styles.chatWrapper}>
+        {/* Chat messages */}
         <div style={styles.chatContainer} ref={chatRef}>
           {messages.map((msg, i) => (
             <div
@@ -78,6 +76,7 @@ export default function Home() {
           )}
         </div>
 
+        {/* Input bar */}
         <div style={styles.inputContainer}>
           <input
             style={styles.input}
@@ -117,7 +116,6 @@ const styles = {
     overflowY: "auto",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-end", // anchors messages visually to bottom
     padding: "30px 20px",
     gap: "10px",
     maskImage: "linear-gradient(to top, black 70%, transparent 100%)", // fade at top
