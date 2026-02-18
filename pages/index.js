@@ -7,35 +7,43 @@ export default function Home() {
   const chatRef = useRef(null);
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+  if (!input.trim()) return;
 
-    const newMessages = [...messages, { role: "user", content: input }];
-    setMessages(newMessages);
-    setInput("");
-    setLoading(true);
+  const updatedMessages = [
+    ...messages,
+    { role: "user", content: input }
+  ];
 
-    try {
-      const res = await fetch("/api/nexis", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: input }),
-      });
+  setMessages(updatedMessages);
+  setInput("");
+  setLoading(true);
 
-      const data = await res.json();
+  try {
+    const res = await fetch("/api/nexis", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: updatedMessages }),
+    });
 
-      setMessages([
-        ...newMessages,
-        { role: "assistant", content: data.result || "Error." }
-      ]);
-    } catch (err) {
-      setMessages([
-        ...newMessages,
-        { role: "assistant", content: "Error connecting to Nexis." }
-      ]);
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(JSON.stringify(data.error));
     }
 
-    setLoading(false);
-  };
+    setMessages([
+      ...updatedMessages,
+      { role: "assistant", content: data.result }
+    ]);
+  } catch (err) {
+    setMessages([
+      ...updatedMessages,
+      { role: "assistant", content: "Error connecting to Nexis." }
+    ]);
+  }
+
+  setLoading(false);
+};
 
   useEffect(() => {
     if (chatRef.current) {
