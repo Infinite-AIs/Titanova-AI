@@ -30,7 +30,7 @@ export default function Home() {
     } catch {
       setMessages([
         ...updatedMessages,
-        { role: "assistant", content: "Nexis could not respond." }
+        { role: "assistant", content: "Titanova could not respond." }
       ]);
     }
 
@@ -78,7 +78,7 @@ export default function Home() {
             style={styles.textarea}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Message Nexis..."
+            placeholder="Message Titanova..."
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
