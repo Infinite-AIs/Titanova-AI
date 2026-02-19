@@ -28,7 +28,7 @@ export default function Admin() {
       setActiveUsers([storedUser?.email || "Unknown"]);
     }
   }, []);
-
+supabase.auth.getUser()
   return (
     <div style={styles.container}>
       <h1>Admin Dashboard</h1>
