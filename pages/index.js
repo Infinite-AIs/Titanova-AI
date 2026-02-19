@@ -18,20 +18,19 @@ export default function Home() {
       const res = await fetch("/api/nexis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages }),
+        body: JSON.stringify({ messages: updatedMessages })
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error();
 
       setMessages([
         ...updatedMessages,
-        { role: "assistant", content: data.result },
+        { role: "assistant", content: data.result }
       ]);
     } catch {
       setMessages([
         ...updatedMessages,
-        { role: "assistant", content: "Error connecting to Nexis." },
+        { role: "assistant", content: "Nexis could not respond." }
       ]);
     }
 
@@ -42,7 +41,7 @@ export default function Home() {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, loading]);
 
   return (
     <div style={styles.container}>
