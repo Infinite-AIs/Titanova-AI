@@ -26,7 +26,6 @@ export default function Home() {
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error();
 
       setMessages([
@@ -43,7 +42,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -52,6 +50,9 @@ export default function Home() {
 
   return (
     <div style={styles.container}>
+      {/* Floating Logo */}
+      <img src="/logo.png" alt="Logo" style={styles.logo} />
+
       <div style={styles.chatWrapper}>
         <div style={styles.chatContainer} ref={chatRef}>
           <div style={{ flexGrow: 1 }} />
@@ -79,12 +80,17 @@ export default function Home() {
         </div>
 
         <div style={styles.inputContainer}>
-          <input
-            style={styles.input}
+          <textarea
+            style={styles.textarea}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Message Nexis..."
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
           />
           <button style={styles.button} onClick={sendMessage}>
             Send
@@ -92,7 +98,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Animations */}
       <style>{`
         @keyframes fadeIn {
           from {
@@ -128,7 +133,6 @@ export default function Home() {
   );
 }
 
-// Typing animation component
 function TypingDots() {
   return (
     <div>
@@ -146,6 +150,18 @@ const styles = {
     justifyContent: "center",
     backgroundColor: "#0f172a",
     color: "white",
+  },
+
+  logo: {
+    position: "fixed",
+    top: "20px",
+    left: "20px",
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+    zIndex: 1000,
   },
 
   chatWrapper: {
@@ -182,7 +198,7 @@ const styles = {
     backgroundColor: "#0f172a",
   },
 
-  input: {
+  textarea: {
     flex: 1,
     padding: "14px",
     borderRadius: "14px",
@@ -190,6 +206,7 @@ const styles = {
     outline: "none",
     fontSize: "15px",
     marginRight: "10px",
+    resize: "none",
   },
 
   button: {
