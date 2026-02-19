@@ -54,7 +54,7 @@ export default function Home() {
     <div style={styles.container}>
       <div style={styles.chatWrapper}>
         <div style={styles.chatContainer} ref={chatRef}>
-          <div style={{ flexGrow: 1 }} /> {/* 👈 pushes messages to bottom */}
+          <div style={{ flexGrow: 1 }} />
 
           {messages.map((msg, i) => (
             <div
@@ -64,6 +64,7 @@ export default function Home() {
                 alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
                 backgroundColor:
                   msg.role === "user" ? "#2563eb" : "#1f2937",
+                animation: "fadeIn 0.3s ease forwards",
               }}
             >
               {msg.content}
@@ -72,7 +73,7 @@ export default function Home() {
 
           {loading && (
             <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
-              Nexis is thinking...
+              <TypingDots />
             </div>
           )}
         </div>
@@ -90,6 +91,50 @@ export default function Home() {
           </button>
         </div>
       </div>
+
+      {/* Animations */}
+      <style>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes blink {
+          0% { opacity: .2; }
+          20% { opacity: 1; }
+          100% { opacity: .2; }
+        }
+
+        .dot {
+          animation: blink 1.4s infinite both;
+          font-size: 22px;
+        }
+
+        .dot:nth-child(2) {
+          animation-delay: .2s;
+        }
+
+        .dot:nth-child(3) {
+          animation-delay: .4s;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// Typing animation component
+function TypingDots() {
+  return (
+    <div>
+      <span className="dot">•</span>
+      <span className="dot">•</span>
+      <span className="dot">•</span>
     </div>
   );
 }
