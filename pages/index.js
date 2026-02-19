@@ -1,16 +1,6 @@
-import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
-  const router = useRouter();
-
-useEffect(() => {
-  const session = localStorage.getItem("session");
-  if (!session) {
-    router.push("/login");
-  }
-}, []);
-
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,11 +9,7 @@ useEffect(() => {
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const updatedMessages = [
-      ...messages,
-      { role: "user", content: input },
-    ];
-
+    const updatedMessages = [...messages, { role: "user", content: input }];
     setMessages(updatedMessages);
     setInput("");
     setLoading(true);
@@ -73,8 +59,7 @@ useEffect(() => {
               style={{
                 ...styles.message,
                 alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                backgroundColor:
-                  msg.role === "user" ? "#2563eb" : "#1f2937",
+                backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
                 animation: "fadeIn 0.3s ease forwards",
               }}
             >
@@ -110,14 +95,8 @@ useEffect(() => {
 
       <style>{`
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes blink {
@@ -131,13 +110,8 @@ useEffect(() => {
           font-size: 22px;
         }
 
-        .dot:nth-child(2) {
-          animation-delay: .2s;
-        }
-
-        .dot:nth-child(3) {
-          animation-delay: .4s;
-        }
+        .dot:nth-child(2) { animation-delay: .2s; }
+        .dot:nth-child(3) { animation-delay: .4s; }
       `}</style>
     </div>
   );
