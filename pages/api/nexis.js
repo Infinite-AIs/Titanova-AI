@@ -1,3 +1,35 @@
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+  const supabaseUrl = 'YOUR_SUPABASE_URL'
+  const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'
+
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+  // Sign up a new user
+  async function signup(email, password, role='user') {
+    const { data, error } = await supabase.auth.signUp({ email, password })
+    if (error) return alert(error.message)
+
+    await supabase.from('profiles').insert([{ id: data.user.id, email, role }])
+    alert('Account created!')
+  }
+
+  // Sign in
+  async function login(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) return alert(error.message)
+    alert('Logged in!')
+  }
+
+  // Get all accounts (admin)
+  async function getAllAccounts() {
+    const { data, error } = await supabase.from('profiles').select('*')
+    console.log(data)
+  }
+</script>
+
+
 import axios from "axios";
 
 export default async function handler(req, res) {
