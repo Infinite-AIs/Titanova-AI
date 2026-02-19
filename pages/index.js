@@ -172,6 +172,7 @@ const styles = {
     fontSize: "15px",
     lineHeight: "1.5",
     wordBreak: "break-word",
+    whiteSpace: "pre-wrap",
   },
 
   inputContainer: {
