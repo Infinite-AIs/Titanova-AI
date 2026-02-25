@@ -6,9 +6,11 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
 
+  // 👇 IP logger
   useEffect(() => {
     fetch("/api/log");
   }, []);
+  
   const sendMessage = async () => {
     if (!input.trim()) return;
 
