@@ -7,9 +7,8 @@ export default function Home() {
   const chatRef = useRef(null);
 
   useEffect(() => {
-  fetch("/api/log");
-}, []);
-  
+    fetch("/api/log");
+  }, []);
   const sendMessage = async () => {
     if (!input.trim()) return;
 
