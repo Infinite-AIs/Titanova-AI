@@ -1,24 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import { useEffect } from "react";
 
-export default function Home() {
-
-  useEffect(() => {
-    fetch("/api/log");
-  }, []);
-
-  return (
-    <div>
-      <h1>Home Page</h1>
-    </div>
-  );
-}
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
 
+  useEffect(() => {
+  fetch("/api/log");
+}, []);
+  
   const sendMessage = async () => {
     if (!input.trim()) return;
 
