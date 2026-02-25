@@ -1,5 +1,7 @@
-export async function getServerSideProps() {
-  const res = await fetch("https://titanova-ai.vercel.app/api/logs");
-  const data = await res.json();
-  return { props: { data } };
+export default function Admin() {
+  return (
+    <div style={{ padding: "40px" }}>
+      <h1>Admin Page</h1>
+    </div>
+  );
 }
