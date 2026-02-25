@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useEffect } from "react";
 useEffect(() => {
   fetch("/api/log");
 }, []);
