@@ -35,7 +35,7 @@ const systemMessage = {
     });
 
     const data = await response.json();
-
+    console.log("Groq response:", data);
     if (!response.ok) {
       console.error("Groq API error:", data);
       return res.status(500).json({ error: data });
