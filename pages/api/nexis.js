@@ -28,9 +28,9 @@ const systemMessage = {
         "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant", // currently supported model
+        model: "llama-3.1-70b-versatile",
         messages: prompt,
-        temperature: 0.7, // adjust for creativity
+        temperature: 0.6, 
       }),
     });
 
