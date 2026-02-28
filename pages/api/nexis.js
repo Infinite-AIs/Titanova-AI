@@ -1,6 +1,31 @@
 // /pages/api/nexis.js
 import OpenAI from 'openai';
 
+const client = new OpenAI({
+  apiKey: 'sk-wormgpt-your-key-here',
+  baseURL: 'https://api.wrmgpt.com/v1'
+});
+
+// Standard completion
+const response = await client.chat.completions.create({
+  model: 'wormgpt-v2',
+  messages: [
+    { role: 'user', content: 'Hello, WormGPT!' }
+  ]
+});
+console.log(response.choices[0].message.content);
+
+// Streaming response
+const stream = await client.chat.completions.create({
+  model: 'wormgpt-v2',
+  messages: [{ role: 'user', content: 'Write a haiku' }],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.choices[0]?.delta?.content || '');
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
