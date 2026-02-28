@@ -28,7 +28,7 @@ const systemMessage = {
         "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "openai/gpt-oss-120b",
+        model: "canopylabs/orpheus-arabic-saudi",
         messages: prompt,
         temperature: 0.6, 
       }),
