@@ -6,12 +6,12 @@ export default async function handler(req, res) {
   try {
     const { messages } = req.body;
 
-    const systemPrompt = `You are Titanova, a helpful AI assistant. Be clear, friendly, and helpful.`;
+    const systemPrompt = `You are Nexis, a helpful AI assistant. Be clear, friendly, and helpful.`;
 
     const userMessage = messages[messages.length - 1]?.content;
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/MiniMaxAI/MiniMax-M2.5",
+      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
       {
         method: "POST",
         headers: {
