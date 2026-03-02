@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const userMessage = messages[messages.length - 1]?.content;
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/MiniMaxAI/MiniMax-M2.5",
+      "https://api-inference.huggingface.co/models/lighteval/RULER-65536-Lamma3-Instruct",
       {
         method: "POST",
         headers: {
