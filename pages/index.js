@@ -55,6 +55,14 @@ export default function Home() {
 
       <div style={styles.chatWrapper}>
         <div style={styles.chatContainer} ref={chatRef}>
+    {messages.length === 0 && (
+  <div style={styles.welcomeScreen}>
+    <h1 style={styles.welcomeTitle}>Titanova</h1>
+    <p style={styles.welcomeSubtitle}>
+      Ask me ANYTHING to get started...
+    </p>
+  </div>
+)}
           <div style={{ flexGrow: 1 }} />
 
           {messages.map((msg, i) => (
@@ -204,4 +212,22 @@ const styles = {
     color: "white",
     cursor: "pointer",
   },
+  welcomeScreen: {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  textAlign: "center",
+  opacity: 0.8,
+},
+
+welcomeTitle: {
+  fontSize: "32px",
+  marginBottom: "10px",
+},
+
+welcomeSubtitle: {
+  fontSize: "16px",
+  color: "#94a3b8",
+},
 };
