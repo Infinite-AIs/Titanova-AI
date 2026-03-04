@@ -52,7 +52,7 @@ export default function Home() {
     <div style={styles.container}>
     {/* Top Right Download Button */}
 <a
-  href="https://github.com/Infinite-Ais/Titanova-AI/releases/latest/download/clamav-installer.exe.crdownload"
+  href="https://github.com/Infinite-Ais/Titanova-AI/releases/latest/download/clamav-installer.exe"
   target="_blank"
   rel="noopener noreferrer"
   style={styles.downloadLink}
