@@ -77,20 +77,7 @@ export default function Home() {
             </div>
           )}
         </div>
-<div className="chat-container">
-  {messages.length === 0 ? (
-    <div className="welcome-screen">
-      <h1>Titanova</h1>
-      <p>Ask me ANYTHING to get started...</p>
-    </div>
-  ) : (
-    messages.map((msg, index) => (
-      <div key={index} className={`message ${msg.role}`}>
-        {msg.content}
-      </div>
-    ))
-  )}
-</div>
+
         <div style={styles.inputContainer}>
           <textarea
             style={styles.textarea}
@@ -109,22 +96,6 @@ export default function Home() {
           </button>
         </div>
       </div>
-.chat-container {
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.welcome-screen {
-  text-align: center;
-  opacity: 0.8;
-}
-
-.welcome-screen h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
