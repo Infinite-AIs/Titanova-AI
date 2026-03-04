@@ -2,7 +2,7 @@ export default function Home() {
   return (
     <div>
       <a
-        href="https://github.com/USERNAME/REPO/releases/latest/download/clamav-installer.exe"
+        href="https://github.com/Infinite-AIs/Titanova-AI/releases/latest/download/clamav-installer.exe"
         target="_blank"
         rel="noopener noreferrer"
       >
