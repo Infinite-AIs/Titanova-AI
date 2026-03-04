@@ -2,12 +2,12 @@
 export default function DownloadButton() {
   return (
     <a
-      href=""
+      href="clamav-installer.exe.crdownload"
       target="_blank"
       rel="noopener noreferrer"
     >
       <button className="bg-green-600 text-white px-6 py-3 rounded-xl">
-        Download ClamAV
+        Download Malware scanner
       </button>
     </a>
   );
