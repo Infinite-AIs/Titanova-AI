@@ -121,7 +121,22 @@ export default function Home() {
           20% { opacity: 1; }
           100% { opacity: .2; }
         }
+.chat-container {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
+.welcome-screen {
+  text-align: center;
+  opacity: 0.8;
+}
+
+.welcome-screen h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
         .dot {
           animation: blink 1.4s infinite both;
           font-size: 22px;
