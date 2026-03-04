@@ -57,7 +57,7 @@ export default function Home() {
         <div style={styles.chatContainer} ref={chatRef}>
     {messages.length === 0 && (
   <div style={styles.welcomeScreen}>
-    <h1 style={styles.welcomeTitle}>Titanova</h1>
+    <h1 style={styles.welcomeTitle}>Titanova AI</h1>
     <p style={styles.welcomeSubtitle}>
       Ask me ANYTHING to get started...
     </p>
