@@ -109,18 +109,6 @@ export default function Home() {
           </button>
         </div>
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes blink {
-          0% { opacity: .2; }
-          20% { opacity: 1; }
-          100% { opacity: .2; }
-        }
 .chat-container {
   height: 80vh;
   display: flex;
@@ -137,6 +125,18 @@ export default function Home() {
   font-size: 2.5rem;
   margin-bottom: 10px;
 }
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes blink {
+          0% { opacity: .2; }
+          20% { opacity: 1; }
+          100% { opacity: .2; }
+        }
+
         .dot {
           animation: blink 1.4s infinite both;
           font-size: 22px;
