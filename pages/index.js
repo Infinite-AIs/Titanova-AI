@@ -80,8 +80,8 @@ export default function Home() {
 <div className="chat-container">
   {messages.length === 0 ? (
     <div className="welcome-screen">
-      <h1>Nexis</h1>
-      <p>Ask me anything to get started 🚀</p>
+      <h1>Titanova</h1>
+      <p>Ask me ANYTHING to get started...</p>
     </div>
   ) : (
     messages.map((msg, index) => (
