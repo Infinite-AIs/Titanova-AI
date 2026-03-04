@@ -77,7 +77,20 @@ export default function Home() {
             </div>
           )}
         </div>
-
+<div className="chat-container">
+  {messages.length === 0 ? (
+    <div className="welcome-screen">
+      <h1>Nexis</h1>
+      <p>Ask me anything to get started 🚀</p>
+    </div>
+  ) : (
+    messages.map((msg, index) => (
+      <div key={index} className={`message ${msg.role}`}>
+        {msg.content}
+      </div>
+    ))
+  )}
+</div>
         <div style={styles.inputContainer}>
           <textarea
             style={styles.textarea}
