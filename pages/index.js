@@ -50,6 +50,17 @@ export default function Home() {
 
   return (
     <div style={styles.container}>
+    {/* Top Right Download Button */}
+<a
+  href="YOUR_GITHUB_RELEASE_LINK"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={styles.downloadLink}
+>
+  <button style={styles.downloadButton}>
+    Download Malware Scanner
+  </button>
+</a>
       {/* Floating Logo */}
       <img src="/logo.png" alt="Logo" style={styles.logo} />
 
@@ -229,5 +240,24 @@ welcomeTitle: {
 welcomeSubtitle: {
   fontSize: "16px",
   color: "#94a3b8",
+},
+
+  downloadLink: {
+  position: "fixed",
+  top: "20px",
+  right: "20px",
+  zIndex: 1000,
+  textDecoration: "none",
+},
+
+downloadButton: {
+  padding: "10px 16px",
+  borderRadius: "12px",
+  border: "none",
+  backgroundColor: "#16a34a",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "14px",
+  boxShadow: "0 0 10px rgba(0,0,0,0.4)",
 },
 };
