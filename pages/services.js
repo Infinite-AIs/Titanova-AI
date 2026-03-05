@@ -1,3 +1,42 @@
+import { useState } from "react";
+
+export default function Scanner() {
+
+  const [result, setResult] = useState("");
+
+  const scanFile = async (e) => {
+
+    const file = e.target.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/scan", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (data.safe) {
+      setResult("✅ File is clean");
+    } else {
+      setResult("⚠ Malware detected: " + data.viruses);
+    }
+  };
+
+  return (
+    <div>
+
+      <h2>File Malware Scanner</h2>
+
+      <input type="file" onChange={scanFile} />
+
+      <p>{result}</p>
+
+    </div>
+  );
+}
 export default function Services() {
   return (
     <div style={styles.container}>
