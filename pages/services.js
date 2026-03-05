@@ -21,7 +21,11 @@ export default function Services() {
     </button>
   </a>
 </div>
-
+<a href="/" style={styles.homeLink}>
+  <button style={styles.homeButton}>
+    ← Back to Home
+  </button>
+</a>
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>File Analyzer</h2>
           <p style={styles.cardText}>
@@ -52,22 +56,6 @@ export default function Services() {
 }
 
 const styles = {
-  homeButton: {
-  padding: "10px 16px",
-  fontSize: "14px",
-  backgroundColor: "#1e88e5",
-  color: "white",
-  border: "none",
-  borderRadius: "6px",
-  cursor: "pointer"
-},
-
-homeLink: {
-  position: "absolute",
-  top: "20px",
-  left: "20px",
-  textDecoration: "none"
-}
   container: {
     minHeight: "100vh",
     backgroundColor: "#0f172a",
@@ -117,4 +105,20 @@ homeLink: {
     color: "white",
     cursor: "pointer"
   }
+  homeButton: {
+  padding: "10px 16px",
+  fontSize: "14px",
+  backgroundColor: "#1e88e5",
+  color: "white",
+  border: "none",
+  borderRadius: "6px",
+  cursor: "pointer"
+},
+
+homeLink: {
+  position: "absolute",
+  top: "20px",
+  left: "20px",
+  textDecoration: "none"
+}
 };
