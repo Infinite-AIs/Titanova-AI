@@ -8,8 +8,8 @@ export default function Services() {
   <h2 style={styles.cardTitle}>Malware Scanner</h2>
 
   <p style={styles.cardText}>
-    Scan files using the ClamAV engine to detect known malware
-    signatures and suspicious activity.
+    Scan your computer using the ClamAV engine for detecting 
+    trojans, viruses, malware & other malicious threats.
   </p>
 
   <a
