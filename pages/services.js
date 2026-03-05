@@ -18,7 +18,7 @@ export default function Services() {
     rel="noopener noreferrer"
   >
     <button style={styles.button}>
-      Launch Scanner
+      Download scanner
     </button>
   </a>
 </div>
