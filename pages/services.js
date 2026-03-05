@@ -27,14 +27,23 @@ export default function Services() {
     ← Back to Home
   </button>
 </a>
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>File Analyzer</h2>
-          <p style={styles.cardText}>
-            Upload a file to analyze metadata, hashes, and possible threats.
-          </p>
-          <button style={styles.button}>Coming soon</button>
-        </div>
+      <input
+  type="file"
+  onChange={async (e) => {
+    const file = e.target.files[0];
 
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/scan", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+    alert(JSON.stringify(data));
+  }}
+/>
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Network Scanner</h2>
           <p style={styles.cardText}>
