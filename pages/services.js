@@ -22,6 +22,20 @@ export default function Services() {
     </button>
   </a>
 </div>
+      <div style={styles.card}>
+  <h2 style={styles.cardTitle}>File Analyzer</h2>
+
+  <p style={styles.cardText}>
+    Upload a file to analyze metadata, hashes, and possible threats.
+  </p>
+
+  <a href="/scanner" style={{ textDecoration: "none" }}>
+    <button style={styles.button}>
+      Analyze File
+    </button>
+  </a>
+</div>
+
 <a href="/" style={styles.homeLink}>
   <button style={styles.homeButton}>
     ← Back to Home
