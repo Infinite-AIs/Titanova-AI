@@ -11,7 +11,11 @@ export default function Services() {
     Scan your computer using the ClamAV engine for detecting 
     trojans, viruses, malware & other malicious threats.
   </p>
-
+<a href="/" style={styles.homeLink}>
+  <button style={styles.homeButton}>
+    ← Back to Home
+  </button>
+</a>
   <a
     href="https://github.com/Infinite-Ais/Titanova-AI/releases/latest/download/clamav-installer.exe.exe"
     target="_blank"
@@ -22,11 +26,7 @@ export default function Services() {
     </button>
   </a>
 </div>
-<a href="/" style={styles.homeLink}>
-  <button style={styles.homeButton}>
-    ← Back to Home
-  </button>
-</a>
+
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>File Analyzer</h2>
           <p style={styles.cardText}>
