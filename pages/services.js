@@ -105,7 +105,7 @@ const styles = {
     color: "white",
     cursor: "pointer"
   }
-  homeButton: {
+homeButton: {
   padding: "10px 16px",
   fontSize: "14px",
   backgroundColor: "#1e88e5",
