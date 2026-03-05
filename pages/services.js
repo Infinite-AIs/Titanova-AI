@@ -13,7 +13,7 @@ export default function Services() {
   </p>
 
   <a
-    href="https://github.com/Infinite-Ais/Titanova-AI/releases/latest/download/clamav-installer.exe"
+    href="https://github.com/Infinite-Ais/Titanova-AI/releases/latest/download/clamav-installer.exe.exe"
     target="_blank"
     rel="noopener noreferrer"
   >
