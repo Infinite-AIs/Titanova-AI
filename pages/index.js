@@ -51,20 +51,17 @@ export default function Home() {
   return (
     <div style={styles.container}>
     {/* Top Right Download Button */}
-<a
-  href="https://github.com/Infinite-Ais/Titanova-AI/releases/latest/download/clamav-installer.exe.exe
-"
-  target="_blank"
-  rel="noopener noreferrer"
-  style={styles.downloadLink}
->
-  <button style={styles.downloadButton}>
-    Download Malware Scanner
-  </button>
-</a>
+
       {/* Floating Logo */}
       <img src="/logo.png" alt="Logo" style={styles.logo} />
-
+<a
+  href="/services"
+  style={styles.downloadLink}
+>
+  <button type="button" style={styles.downloadButton}>
+    Services
+  </button>
+</a>
       <div style={styles.chatWrapper}>
         <div style={styles.chatContainer} ref={chatRef}>
     {messages.length === 0 && (
