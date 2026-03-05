@@ -31,7 +31,7 @@ export default function Services() {
           <p style={styles.cardText}>
             Upload a file to analyze metadata, hashes, and possible threats.
           </p>
-          <button style={styles.button}>Analyze File</button>
+          <button style={styles.button}>Coming soon</button>
         </div>
 
         <div style={styles.card}>
@@ -39,15 +39,7 @@ export default function Services() {
           <p style={styles.cardText}>
             Scan a network or IP for open ports and security weaknesses.
           </p>
-          <button style={styles.button}>Start Scan</button>
-        </div>
-
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>AI Security Assistant</h2>
-          <p style={styles.cardText}>
-            Ask Titanova about malware, cybersecurity threats, or safe coding.
-          </p>
-          <button style={styles.button}>Open Assistant</button>
+          <button style={styles.button}>Coming soon</button>
         </div>
 
       </div>
