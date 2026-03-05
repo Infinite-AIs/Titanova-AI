@@ -4,15 +4,24 @@ export default function Services() {
       <h1 style={styles.title}>Titanova Services</h1>
 
       <div style={styles.grid}>
+    <div style={styles.card}>
+  <h2 style={styles.cardTitle}>Malware Scanner</h2>
 
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Malware Scanner</h2>
-          <p style={styles.cardText}>
-            Scan files using the ClamAV engine to detect known malware
-            signatures and suspicious activity.
-          </p>
-          <button style={styles.button}>Launch Scanner</button>
-        </div>
+  <p style={styles.cardText}>
+    Scan files using the ClamAV engine to detect known malware
+    signatures and suspicious activity.
+  </p>
+
+  <a
+    href="https://github.com/Infinite-Ais/Titanova-AI/releases/latest/download/clamav-installer.exe"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <button style={styles.button}>
+      Launch Scanner
+    </button>
+  </a>
+</div>
 
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>File Analyzer</h2>
