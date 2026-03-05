@@ -85,7 +85,6 @@ const styles = {
     boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
     transition: "transform 0.2s"
   },
-
   cardTitle: {
     fontSize: "20px",
     marginBottom: "10px"
@@ -104,8 +103,8 @@ const styles = {
     backgroundColor: "#2563eb",
     color: "white",
     cursor: "pointer"
-  }
-homeButton: {
+  },
+  homeButton: {
   padding: "10px 16px",
   fontSize: "14px",
   backgroundColor: "#1e88e5",
