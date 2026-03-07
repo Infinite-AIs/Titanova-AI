@@ -1,49 +1,53 @@
 import { useState } from "react";
 
 export default function Scanner() {
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState("No file scanned yet.");
 
   const analyzeFile = async (event) => {
     const file = event.target.files[0];
-
     if (!file) return;
 
-    const arrayBuffer = await file.arrayBuffer();
+    const buffer = await file.arrayBuffer();
 
-    const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
-
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    setResult("Scanning file hash...");
 
-    setResult(`
-File Name: ${file.name}
-File Size: ${file.size} bytes
-SHA256 Hash: ${hashHex}
-`);
+    const res = await fetch("/api/hashscan", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ hash })
+    });
+
+    const data = await res.json();
+
+    setResult(JSON.stringify({
+      file: file.name,
+      size: file.size,
+      sha256: hash,
+      scan_result: data
+    }, null, 2));
   };
 
   return (
     <div style={styles.container}>
 
-      <a href="/services" style={styles.backLink}>
+      <a href="/services" style={styles.back}>
         ← Back to Services
       </a>
 
       <h1 style={styles.title}>Titanova File Analyzer</h1>
 
       <div style={styles.card}>
-
-        <input
-          type="file"
-          onChange={analyzeFile}
-          style={styles.input}
-        />
+        <input type="file" onChange={analyzeFile} />
 
         <pre style={styles.result}>
           {result}
         </pre>
-
       </div>
 
     </div>
@@ -56,13 +60,12 @@ const styles = {
     backgroundColor: "#0f172a",
     color: "white",
     padding: "60px",
-    fontFamily: "sans-serif",
     textAlign: "center"
   },
 
   title: {
     fontSize: "36px",
-    marginBottom: "40px"
+    marginBottom: "30px"
   },
 
   card: {
@@ -73,19 +76,15 @@ const styles = {
     margin: "0 auto"
   },
 
-  input: {
-    marginBottom: "20px"
-  },
-
   result: {
+    marginTop: "20px",
     backgroundColor: "#020617",
     padding: "20px",
     borderRadius: "10px",
-    textAlign: "left",
-    whiteSpace: "pre-wrap"
+    textAlign: "left"
   },
 
-  backLink: {
+  back: {
     position: "absolute",
     top: "20px",
     left: "20px",
