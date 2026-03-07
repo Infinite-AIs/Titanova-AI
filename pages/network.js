@@ -1,121 +1,151 @@
 import { useState } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
 
 export default function NetworkScanner() {
-  const [target, setTarget] = useState("");
-  const [result, setResult] = useState("");
 
-  const testConnection = async () => {
-    if (!target) return;
+  const [url, setUrl] = useState("");
+  const [results, setResults] = useState([]);
+  const [headers, setHeaders] = useState(null);
 
-    setResult("Testing connection...");
+  const runTest = async () => {
+    if (!url) return;
 
-    const start = Date.now();
+    const regions = ["us", "eu", "asia"];
 
-    try {
-      const response = await fetch("/api/ping?url=" + encodeURIComponent(target));
+    let newResults = [];
 
-      const data = await response.json();
+    for (let region of regions) {
 
-      const latency = Date.now() - start;
+      const start = Date.now();
 
-      if (data.online) {
-        setResult(`🟢 ONLINE
-Latency: ${latency} ms`);
-      } else {
-        setResult("🔴 OFFLINE or Unreachable");
+      try {
+        const res = await fetch(`/api/ping?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+
+        const latency = Date.now() - start;
+
+        newResults.push({
+          region,
+          latency,
+          status: data.online ? "Online" : "Offline"
+        });
+
+      } catch {
+        newResults.push({
+          region,
+          latency: 0,
+          status: "Error"
+        });
       }
+    }
 
-    } catch (error) {
-      setResult("🔴 Connection Failed");
+    setResults(newResults);
+    checkHeaders(url);
+  };
+
+  const checkHeaders = async (target) => {
+    try {
+      const res = await fetch(`/api/ping?url=${encodeURIComponent(target)}`);
+      const data = await res.json();
+      setHeaders(data.headers || null);
+    } catch {
+      setHeaders(null);
     }
   };
 
   return (
     <div style={styles.container}>
 
-      <a href="/services" style={styles.back}>
-        ← Back to Services
-      </a>
+      <h1 style={styles.title}>Titanova Network Dashboard</h1>
 
-      <h1 style={styles.title}>Titanova Network Diagnostics</h1>
+      <input
+        style={styles.input}
+        placeholder="Enter website URL"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+      />
 
-      <div style={styles.card}>
+      <button style={styles.button} onClick={runTest}>
+        Run Full Scan
+      </button>
 
-        <input
-          type="text"
-          placeholder="Enter website URL (https://example.com)"
-          value={target}
-          onChange={(e) => setTarget(e.target.value)}
-          style={styles.input}
-        />
-
-        <button onClick={testConnection} style={styles.button}>
-          Test Connection
-        </button>
-
-        <pre style={styles.result}>
-          {result}
-        </pre>
-
+      {/* Live Ping Graph */}
+      <div style={{ width: "100%", height: 300, marginTop: 40 }}>
+        <ResponsiveContainer>
+          <LineChart data={results}>
+            <XAxis dataKey="region" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="latency" stroke="#2563eb" />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
+
+      {/* Region Results */}
+      <div style={{ marginTop: 30 }}>
+        {results.map((r, i) => (
+          <p key={i}>
+            {r.region.toUpperCase()} — {r.status} — {r.latency}ms
+          </p>
+        ))}
+      </div>
+
+      {/* Security Headers */}
+      {headers && (
+        <div style={styles.headers}>
+          <h2>Security Headers</h2>
+          <pre>{JSON.stringify(headers, null, 2)}</pre>
+        </div>
+      )}
+
     </div>
   );
 }
 
 const styles = {
+
   container: {
     minHeight: "100vh",
     backgroundColor: "#0f172a",
     color: "white",
-    padding: "60px",
+    padding: "40px",
     textAlign: "center",
     fontFamily: "sans-serif"
   },
 
   title: {
-    fontSize: "36px",
-    marginBottom: "30px"
-  },
-
-  card: {
-    backgroundColor: "#1f2937",
-    padding: "30px",
-    borderRadius: "16px",
-    maxWidth: "600px",
-    margin: "0 auto"
+    fontSize: "32px",
+    marginBottom: "20px"
   },
 
   input: {
-    width: "100%",
     padding: "12px",
-    marginBottom: "15px",
+    width: "300px",
     borderRadius: "8px",
-    border: "none"
+    border: "none",
+    marginRight: "10px"
   },
 
   button: {
     padding: "10px 16px",
-    borderRadius: "10px",
+    borderRadius: "8px",
     border: "none",
     backgroundColor: "#2563eb",
     color: "white",
     cursor: "pointer"
   },
 
-  result: {
-    marginTop: "20px",
-    backgroundColor: "#020617",
+  headers: {
+    marginTop: "40px",
+    backgroundColor: "#1f2937",
     padding: "20px",
-    borderRadius: "10px",
-    textAlign: "left",
-    whiteSpace: "pre-wrap"
-  },
-
-  back: {
-    position: "absolute",
-    top: "20px",
-    left: "20px",
-    color: "white",
-    textDecoration: "none"
+    borderRadius: "12px"
   }
 };
