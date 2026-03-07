@@ -1,7 +1,49 @@
 import { useState } from "react";
 
 export default function Scanner() {
+const analyzeFile = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
+  setResult("Reading file...");
+
+  const buffer = await file.arrayBuffer();
+
+  setResult("Generating SHA256 hash...");
+
+  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+
+  setResult("Preparing file for upload...");
+
+  const base64 = btoa(
+    String.fromCharCode(...new Uint8Array(buffer))
+  );
+
+  setResult("Checking malware database...");
+
+  const res = await fetch("/api/hashscan", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      hash,
+      fileData: base64
+    })
+  });
+
+  const data = await res.json();
+
+  setResult(JSON.stringify({
+    file: file.name,
+    size: file.size,
+    sha256: hash,
+    scan: data
+  }, null, 2));
+};
   const [result, setResult] = useState("Upload a file to analyze.");
 
   const analyzeFile = async (e) => {
