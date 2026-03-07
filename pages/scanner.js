@@ -2,34 +2,32 @@ import { useState } from "react";
 
 export default function Scanner() {
 
-  const [result, setResult] = useState("Upload a file to analyze.");
+  const [status, setStatus] = useState("Upload a file to analyze.");
+  const [details, setDetails] = useState("");
 
   const analyzeFile = async (e) => {
 
     const file = e.target.files[0];
     if (!file) return;
 
-    setResult("Reading file...");
+    setStatus("Reading file...");
 
     const buffer = await file.arrayBuffer();
 
-    setResult("Generating SHA256 hash...");
+    setStatus("Generating SHA256 hash...");
 
     const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
 
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-
     const hash = hashArray.map(b =>
       b.toString(16).padStart(2, "0")
     ).join("");
 
-    setResult("Preparing file for upload...");
+    setStatus("Checking malware database...");
 
     const base64 = btoa(
       String.fromCharCode(...new Uint8Array(buffer))
     );
-
-    setResult("Checking malware database...");
 
     const res = await fetch("/api/hashscan", {
       method: "POST",
@@ -44,12 +42,45 @@ export default function Scanner() {
 
     const data = await res.json();
 
-    setResult(JSON.stringify({
-      file: file.name,
-      size: file.size,
-      sha256: hash,
-      scan: data
-    }, null, 2));
+    if (data.type === "known") {
+
+      const malicious = data.stats.malicious;
+
+      if (malicious > 0) {
+        setStatus("🔴 MALWARE DETECTED");
+      } else {
+        setStatus("🟢 SAFE");
+      }
+
+      setDetails(`
+File: ${file.name}
+Size: ${file.size} bytes
+SHA256: ${hash}
+
+Malicious detections: ${malicious}
+Suspicious: ${data.stats.suspicious}
+Harmless engines: ${data.stats.harmless}
+`);
+
+    } else if (data.type === "uploaded") {
+
+      setStatus("🟡 File uploaded for analysis. Results may take a minute.");
+
+      setDetails(`
+File: ${file.name}
+Size: ${file.size} bytes
+SHA256: ${hash}
+
+VirusTotal is analyzing this file.
+Refresh later to see detection results.
+`);
+
+    } else {
+
+      setStatus("Unknown result");
+      setDetails(JSON.stringify(data, null, 2));
+
+    }
   };
 
   return (
@@ -63,14 +94,12 @@ export default function Scanner() {
 
       <div style={styles.card}>
 
-        <input
-          type="file"
-          onChange={analyzeFile}
-          style={styles.input}
-        />
+        <input type="file" onChange={analyzeFile} />
+
+        <h2 style={styles.status}>{status}</h2>
 
         <pre style={styles.result}>
-          {result}
+          {details}
         </pre>
 
       </div>
@@ -104,8 +133,9 @@ const styles = {
     boxShadow: "0 10px 25px rgba(0,0,0,0.3)"
   },
 
-  input: {
-    marginBottom: "20px"
+  status: {
+    marginTop: "20px",
+    fontSize: "24px"
   },
 
   result: {
