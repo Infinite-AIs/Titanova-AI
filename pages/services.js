@@ -44,19 +44,6 @@ export default function Services() {
             </button>
           </a>
         </div>
-  <div style={styles.card}>
-  <h2 style={styles.cardTitle}>Network Scanner</h2>
-
-  <p style={styles.cardText}>
-    Scan a network or IP for open ports and security weaknesses.
-  </p>
-
-  <a href="/network" style={{ textDecoration: "none" }}>
-    <button style={styles.button}>
-      Open Network Scanner
-    </button>
-  </a>
-</div>
       </div>
     </div>
   );
