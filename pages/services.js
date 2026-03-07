@@ -41,9 +41,7 @@ export default function Services() {
     ← Back to Home
   </button>
 </a>
-      <input
-  type="file"
-  onChange={async (e) => {
+       {
     const file = e.target.files[0];
 
     const formData = new FormData();
