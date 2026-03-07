@@ -51,16 +51,11 @@ export default function Services() {
     Scan a network or IP for open ports and security weaknesses.
   </p>
 
-  <button
-    style={{
-      ...styles.button,
-      backgroundColor: "#6b7280",
-      cursor: "not-allowed"
-    }}
-    disabled
-  >
-    Coming Soon
-  </button>
+  <a href="/network" style={{ textDecoration: "none" }}>
+    <button style={styles.button}>
+      Open Network Scanner
+    </button>
+  </a>
 </div>
       </div>
     </div>
