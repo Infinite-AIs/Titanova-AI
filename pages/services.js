@@ -44,19 +44,24 @@ export default function Services() {
             </button>
           </a>
         </div>
+  <div style={styles.card}>
+  <h2 style={styles.cardTitle}>Network Scanner</h2>
 
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Network Scanner</h2>
+  <p style={styles.cardText}>
+    Scan a network or IP for open ports and security weaknesses.
+  </p>
 
-          <p style={styles.cardText}>
-            Scan a network or IP for open ports and security weaknesses.
-          </p>
-
-          <button style={styles.button}>
-            Coming Soon
-          </button>
-        </div>
-
+  <button
+    style={{
+      ...styles.button,
+      backgroundColor: "#6b7280",
+      cursor: "not-allowed"
+    }}
+    disabled
+  >
+    Coming Soon
+  </button>
+</div>
       </div>
     </div>
   );
