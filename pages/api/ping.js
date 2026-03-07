@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+
   const { url } = req.query;
 
   if (!url) {
@@ -6,15 +7,19 @@ export default async function handler(req, res) {
   }
 
   try {
+
     const response = await fetch(url);
 
-    if (response.ok) {
-      return res.json({ online: true });
-    } else {
-      return res.json({ online: false });
-    }
+    const headers = Object.fromEntries(response.headers);
 
-  } catch (error) {
-    return res.json({ online: false });
+    res.json({
+      online: response.ok,
+      headers
+    });
+
+  } catch {
+    res.json({
+      online: false
+    });
   }
 }
