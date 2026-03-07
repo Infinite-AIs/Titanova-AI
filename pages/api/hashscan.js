@@ -1,16 +1,23 @@
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "32mb"
+    }
+  }
+};
+
 export default async function handler(req, res) {
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { hash } = req.body;
-
-  if (!hash) {
-    return res.status(400).json({ error: "No hash provided" });
-  }
+  const { hash, fileData } = req.body;
 
   try {
-    const response = await fetch(
+
+    // 1️⃣ Check if hash already exists
+    const check = await fetch(
       `https://www.virustotal.com/api/v3/files/${hash}`,
       {
         headers: {
@@ -19,25 +26,51 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    if (check.status === 200) {
+      const data = await check.json();
 
-    if (data.error) {
+      const stats = data.data.attributes.last_analysis_stats;
+
       return res.json({
-        status: "Unknown",
-        message: "File not found in malware database"
+        type: "known",
+        stats
       });
     }
 
-    const stats = data.data.attributes.last_analysis_stats;
+    // 2️⃣ If not found → upload file
+    if (!fileData) {
+      return res.json({
+        type: "unknown",
+        message: "File not found in database"
+      });
+    }
 
-    res.json({
-      malicious: stats.malicious,
-      suspicious: stats.suspicious,
-      harmless: stats.harmless,
-      engines: stats
+    const buffer = Buffer.from(fileData, "base64");
+
+    const form = new FormData();
+    form.append("file", new Blob([buffer]));
+
+    const upload = await fetch(
+      "https://www.virustotal.com/api/v3/files",
+      {
+        method: "POST",
+        headers: {
+          "x-apikey": process.env.VT_API_KEY
+        },
+        body: form
+      }
+    );
+
+    const uploadData = await upload.json();
+
+    return res.json({
+      type: "uploaded",
+      analysis: uploadData
     });
 
   } catch (err) {
-    res.status(500).json({ error: "Scan failed" });
+    res.status(500).json({
+      error: "Scan failed"
+    });
   }
 }
