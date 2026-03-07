@@ -1,30 +1,32 @@
 import { useState } from "react";
 
 export default function NetworkScanner() {
-
-  const [url, setUrl] = useState("");
+  const [target, setTarget] = useState("");
   const [result, setResult] = useState("");
 
   const testConnection = async () => {
-
-    if (!url) return;
+    if (!target) return;
 
     setResult("Testing connection...");
 
     const start = Date.now();
 
     try {
-      const response = await fetch(url, { mode: "no-cors" });
+      const response = await fetch("/api/ping?url=" + encodeURIComponent(target));
+
+      const data = await response.json();
 
       const latency = Date.now() - start;
 
-      setResult(`
-Status: Likely Online
-Latency: ${latency} ms
-      `);
+      if (data.online) {
+        setResult(`🟢 ONLINE
+Latency: ${latency} ms`);
+      } else {
+        setResult("🔴 OFFLINE or Unreachable");
+      }
 
     } catch (error) {
-      setResult("Status: Offline or Blocked");
+      setResult("🔴 Connection Failed");
     }
   };
 
@@ -41,9 +43,9 @@ Latency: ${latency} ms
 
         <input
           type="text"
-          placeholder="Enter a URL (example: https://example.com)"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Enter website URL (https://example.com)"
+          value={target}
+          onChange={(e) => setTarget(e.target.value)}
           style={styles.input}
         />
 
@@ -56,7 +58,6 @@ Latency: ${latency} ms
         </pre>
 
       </div>
-
     </div>
   );
 }
