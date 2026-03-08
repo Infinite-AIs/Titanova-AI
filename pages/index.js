@@ -49,10 +49,12 @@ export default function Home() {
   }, [messages, loading]);
 
   return (
+    <>
     <Head>
-  <title>Titanova</title>
-  <link rel="icon" href="/favicon.ico" />
-</Head>
+      <title>Titanova</title>
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
+
     <div style={styles.container}>
     {/* Top Right Download Button */}
 
