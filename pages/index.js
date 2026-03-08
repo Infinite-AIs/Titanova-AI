@@ -50,12 +50,13 @@ export default function Home() {
 
   return (
     <>
-    <Head>
-      <title>Titanova</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+      <Head>
+        <title>Titanova</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-    <div style={styles.container}>
+      <div style={styles.container}>
+    
     {/* Top Right Download Button */}
 
       {/* Floating Logo */}
