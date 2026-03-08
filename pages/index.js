@@ -141,6 +141,7 @@ export default function Home() {
         .dot:nth-child(3) { animation-delay: .4s; }
       `}</style>
     </div>
+</>
   );
 }
 
