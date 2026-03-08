@@ -18,6 +18,7 @@ export default function Services() {
           <p style={styles.cardText}>
             Scan your computer for detecting
             trojans, viruses, malware & other malicious threats.
+            -Only works with windows-
           </p>
 
           <a
