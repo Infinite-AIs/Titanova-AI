@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-
+import Head from "next/head";
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
