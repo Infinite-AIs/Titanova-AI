@@ -55,6 +55,25 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
      <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/logo.png" />
+    <Head>
+  <title>Titanova</title>
+  <meta name="description" content="Ask Titanova AI anything. Your AI assistant for answers, code, and ethical hacking." />
+  <meta name="keywords" content="AI, chatbot, assistant, Titanova, Hack" />
+  <meta name="CyberWeb" content="Cyberweb" />
+
+  {/* Open Graph for social media previews */}
+  <meta property="og:title" content="Titanova AI" />
+  <meta property="og:description" content="Ask Titanova AI anything. Your AI assistant for answers, code, and ethical hacking." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://titanova-ai.vercel.app/" />
+  <meta property="og:image" content="https://titanova-ai.vercel.app/logo.png" />
+
+  {/* Twitter Card */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Titanova AI" />
+  <meta name="twitter:description" content="Ask Titanova AI anything. Your AI assistant for answers, code, and ethical hacking." />
+  <meta name="twitter:image" content="https://titanova-ai.vercel.app/logo.png" />
+</Head>
       </Head>
 
       <div style={styles.container}>
