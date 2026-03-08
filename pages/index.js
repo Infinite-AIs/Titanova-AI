@@ -53,6 +53,8 @@ export default function Home() {
       <Head>
         <title>Titanova</title>
         <link rel="icon" href="/favicon.ico" />
+     <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/logo.png" />
       </Head>
 
       <div style={styles.container}>
