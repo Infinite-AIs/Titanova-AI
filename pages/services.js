@@ -21,7 +21,7 @@ export default function Services() {
           </p>
 
           <a
-            href="https://github.com/Infinite-AIs/Titanova-AI/releases/tag/titanova-scanner"
+            href="https://github.com/Infinite-AIs/Titanova-AI/releases/tag/titanova-scanner/titanova-scanner.bat"
             target="_blank"
             rel="noopener noreferrer"
           >
