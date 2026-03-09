@@ -11,9 +11,7 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
-  }
-}
-{
+  },
   "name": "llm-chat-backend-sessions",
   "version": "1.0.0",
   "private": true,
