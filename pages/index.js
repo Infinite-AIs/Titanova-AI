@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 export default function Home() {
+  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -124,22 +126,23 @@ export default function Home() {
         </div>
 
         <div style={styles.inputContainer}>
-          <textarea
-            style={styles.textarea}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Message Titanova..."
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-          />
-          <button style={styles.button} onClick={sendMessage}>
-            Send
-          </button>
-        </div>
+  <textarea
+    style={styles.textarea}
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    placeholder="Message Titanova..."
+    onKeyDown={(e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    }}
+  />
+
+  <button style={styles.button} onClick={handleSend}>
+    Send
+  </button>
+</div>
       </div>
       <style>{`
         @keyframes fadeIn {
