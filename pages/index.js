@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+
 export default function Home() {
   const router = useRouter();
   const [messages, setMessages] = useState([]);
@@ -8,11 +9,11 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
 
-  // 👇 IP logger
+  // IP logger
   useEffect(() => {
     fetch("/api/log");
   }, []);
-  
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -44,6 +45,18 @@ export default function Home() {
     setLoading(false);
   };
 
+  // LOGIN CHECK
+  function handleSend() {
+    const loggedIn = localStorage.getItem("loggedIn");
+
+    if (!loggedIn) {
+      router.push("/login");
+      return;
+    }
+
+    sendMessage();
+  }
+
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -54,118 +67,101 @@ export default function Home() {
     <>
       <Head>
         <title>Titanova</title>
+        <meta name="description" content="Ask Titanova AI anything." />
         <link rel="icon" href="/favicon.ico" />
-     <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" href="/logo.png" />
-    <Head>
-  <title>Titanova</title>
-  <meta name="description" content="Ask Titanova AI anything. Your AI assistant for answers, code, and ethical hacking." />
-  <meta name="keywords" content="AI, chatbot, assistant, Titanova, Hack" />
-  <meta name="CyberWeb" content="Cyberweb" />
-
-  {/* Open Graph for social media previews */}
-  <meta property="og:title" content="Titanova AI" />
-  <meta property="og:description" content="Ask Titanova AI anything. Your AI assistant for answers, code, and ethical hacking." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://titanova-ai.vercel.app/" />
-  <meta property="og:image" content="https://titanova-ai.vercel.app/logo.png" />
-
-  {/* Twitter Card */}
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Titanova AI" />
-  <meta name="twitter:description" content="Ask Titanova AI anything. Your AI assistant for answers, code, and ethical hacking." />
-  <meta name="twitter:image" content="https://titanova-ai.vercel.app/logo.png" />
-</Head>
       </Head>
 
       <div style={styles.container}>
-    
-    {/* Top Right Download Button */}
 
-      {/* Floating Logo */}
-      <img src="/logo.png" alt="Logo" style={styles.logo} />
-<a
-  href="/services"
-  style={styles.downloadLink}
->
-  <button type="button" style={styles.downloadButton}>
-    Services
-  </button>
-</a>
-      <div style={styles.chatWrapper}>
-        <div style={styles.chatContainer} ref={chatRef}>
-    {messages.length === 0 && (
-  <div style={styles.welcomeScreen}>
-    <h1 style={styles.welcomeTitle}>Titanova AI</h1>
-    <p style={styles.welcomeSubtitle}>
-      Ask me ANYTHING to get started...
-    </p>
-  </div>
-)}
-          <div style={{ flexGrow: 1 }} />
+        {/* Logo */}
+        <img src="/logo.png" alt="Logo" style={styles.logo} />
 
-          {messages.map((msg, i) => (
-            <div
-              key={i}
-              style={{
-                ...styles.message,
-                alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
-                animation: "fadeIn 0.3s ease forwards",
+        {/* Services Button */}
+        <a href="/services" style={styles.downloadLink}>
+          <button style={styles.downloadButton}>
+            Services
+          </button>
+        </a>
+
+        <div style={styles.chatWrapper}>
+          <div style={styles.chatContainer} ref={chatRef}>
+
+            {messages.length === 0 && (
+              <div style={styles.welcomeScreen}>
+                <h1 style={styles.welcomeTitle}>Titanova AI</h1>
+                <p style={styles.welcomeSubtitle}>
+                  Ask me ANYTHING to get started...
+                </p>
+              </div>
+            )}
+
+            <div style={{ flexGrow: 1 }} />
+
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                style={{
+                  ...styles.message,
+                  alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+                  backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
+                  animation: "fadeIn 0.3s ease forwards"
+                }}
+              >
+                {msg.content}
+              </div>
+            ))}
+
+            {loading && (
+              <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
+                <TypingDots />
+              </div>
+            )}
+
+          </div>
+
+          <div style={styles.inputContainer}>
+            <textarea
+              style={styles.textarea}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Message Titanova..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
               }}
-            >
-              {msg.content}
-            </div>
-          ))}
+            />
 
-          {loading && (
-            <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
-              <TypingDots />
-            </div>
-          )}
+            <button style={styles.button} onClick={handleSend}>
+              Send
+            </button>
+          </div>
         </div>
 
-        <div style={styles.inputContainer}>
-  <textarea
-    style={styles.textarea}
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    placeholder="Message Titanova..."
-    onKeyDown={(e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        handleSend();
-      }
-    }}
-  />
+        <style>{`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
 
-  <button style={styles.button} onClick={handleSend}>
-    Send
-  </button>
-</div>
+          @keyframes blink {
+            0% { opacity: .2; }
+            20% { opacity: 1; }
+            100% { opacity: .2; }
+          }
+
+          .dot {
+            animation: blink 1.4s infinite both;
+            font-size: 22px;
+          }
+
+          .dot:nth-child(2) { animation-delay: .2s; }
+          .dot:nth-child(3) { animation-delay: .4s; }
+        `}</style>
+
       </div>
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes blink {
-          0% { opacity: .2; }
-          20% { opacity: 1; }
-          100% { opacity: .2; }
-        }
-
-        .dot {
-          animation: blink 1.4s infinite both;
-          font-size: 22px;
-        }
-
-        .dot:nth-child(2) { animation-delay: .2s; }
-        .dot:nth-child(3) { animation-delay: .4s; }
-      `}</style>
-    </div>
-</>
+    </>
   );
 }
 
@@ -253,41 +249,42 @@ const styles = {
     color: "white",
     cursor: "pointer",
   },
+
   welcomeScreen: {
-  position: "absolute",
-  top: "40%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  textAlign: "center",
-  opacity: 0.8,
-},
+    position: "absolute",
+    top: "40%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    textAlign: "center",
+    opacity: 0.8,
+  },
 
-welcomeTitle: {
-  fontSize: "32px",
-  marginBottom: "10px",
-},
+  welcomeTitle: {
+    fontSize: "32px",
+    marginBottom: "10px",
+  },
 
-welcomeSubtitle: {
-  fontSize: "16px",
-  color: "#94a3b8",
-},
+  welcomeSubtitle: {
+    fontSize: "16px",
+    color: "#94a3b8",
+  },
 
   downloadLink: {
-  position: "fixed",
-  top: "20px",
-  right: "20px",
-  zIndex: 1000,
-  textDecoration: "none",
-},
+    position: "fixed",
+    top: "20px",
+    right: "20px",
+    zIndex: 1000,
+    textDecoration: "none",
+  },
 
-downloadButton: {
-  padding: "10px 16px",
-  borderRadius: "12px",
-  border: "none",
-  backgroundColor: "#16a34a",
-  color: "white",
-  cursor: "pointer",
-  fontSize: "14px",
-  boxShadow: "0 0 10px rgba(0,0,0,0.4)",
-},
+  downloadButton: {
+    padding: "10px 16px",
+    borderRadius: "12px",
+    border: "none",
+    backgroundColor: "#16a34a",
+    color: "white",
+    cursor: "pointer",
+    fontSize: "14px",
+    boxShadow: "0 0 10px rgba(0,0,0,0.4)",
+  },
 };
