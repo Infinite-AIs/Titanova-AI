@@ -8,7 +8,8 @@ import { useRouter } from "next/router";
 
 export default function Home() {
   const router = useRouter(); // ✅ Declare router first
-  const { data: session } = useSession();
+  const sessionData = useSession();
+const session = sessionData?.data;
 
   useEffect(() => {
     if (!session) {
