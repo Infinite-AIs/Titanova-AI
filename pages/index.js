@@ -9,18 +9,18 @@ import { useRouter } from "next/router";
 export default function Home() {
   const router = useRouter(); // ✅ Declare router first
   const sessionData = useSession();
-const session = sessionData?.data;
-
-  useEffect(() => {
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session, router]);
+  const session = sessionData?.data;
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
+  
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, router]);
 
   // IP logger
   useEffect(() => {
