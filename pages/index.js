@@ -8,7 +8,7 @@ export default function Home() {
   const router = useRouter(); // ✅ Declare router first
   const { data: session } = useSession();
 
-  // Redirect to login if not logged in
+
   useEffect(() => {
     if (!session) {
       router.push("/login");
