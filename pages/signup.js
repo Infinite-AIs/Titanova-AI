@@ -1,94 +1,62 @@
-// pages/signup.js
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-export default function SignUp() {
+export default function Signup() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setMessage("");
 
-  const handleSignUp = async () => {
-    setLoading(true);
-    setError("");
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-    try {
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+    const data = await res.json();
 
-      const data = await res.json();
-
-      if (data.success) {
-        router.push("/login"); // Redirect to login after signup
-      } else {
-        setError(data.message || "Something went wrong!");
-      }
-    } catch (err) {
-      setError("Failed to sign up. Try again.");
+    if (data.success) {
+      setMessage("Signup successful! Redirecting to login...");
+      setTimeout(() => router.push("/login"), 1500);
+    } else {
+      setMessage(data.error);
     }
-
-    setLoading(false);
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Sign Up</h1>
-      <input
-        type="email"
-        placeholder="Email"
-        style={styles.input}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        style={styles.input}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button style={styles.button} onClick={handleSignUp} disabled={loading}>
-        {loading ? "Signing Up..." : "Sign Up"}
-      </button>
-      {error && <p style={styles.error}>{error}</p>}
+      <h1>Sign Up</h1>
+      <form onSubmit={handleSignup} style={styles.form}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          style={styles.input}
+        />
+        <button type="submit" style={styles.button}>Sign Up</button>
+      </form>
+      {message && <p>{message}</p>}
     </div>
   );
 }
 
 const styles = {
-  container: {
-    minHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0f172a",
-    color: "white",
-    padding: "20px",
-  },
-  title: { fontSize: "32px", marginBottom: "20px" },
-  input: {
-    width: "300px",
-    padding: "12px",
-    margin: "8px 0",
-    borderRadius: "8px",
-    border: "none",
-    fontSize: "16px",
-  },
-  button: {
-    padding: "12px 20px",
-    marginTop: "12px",
-    borderRadius: "8px",
-    border: "none",
-    backgroundColor: "#2563eb",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
-  error: { color: "#f87171", marginTop: "10px" },
+  container: { display: "flex", flexDirection: "column", alignItems: "center", marginTop: "100px" },
+  form: { display: "flex", flexDirection: "column", width: "300px", gap: "10px" },
+  input: { padding: "10px", borderRadius: "8px", border: "1px solid #ccc" },
+  button: { padding: "10px", borderRadius: "8px", backgroundColor: "#2563eb", color: "white", border: "none", cursor: "pointer" },
 };
