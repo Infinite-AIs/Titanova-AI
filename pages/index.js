@@ -1,4 +1,5 @@
 // pages/index.js
+"use client"; // <-- add this at the very top
 import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
