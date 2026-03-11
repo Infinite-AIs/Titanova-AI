@@ -5,14 +5,15 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 export default function Home() {
-  const { data: session } = useSession()
+  const router = useRouter();          // FIRST
+  const { data: session } = useSession();  // SECOND
 
-useEffect(()=>{
- if(!session){
-   router.push("/login")
- }
-},[session])
-  const router = useRouter();
+  useEffect(() => {
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, router]);
+
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
