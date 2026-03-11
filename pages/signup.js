@@ -9,7 +9,6 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  
   const handleSignUp = async () => {
     setLoading(true);
     setError("");
