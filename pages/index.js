@@ -8,7 +8,6 @@ export default function Home() {
   const router = useRouter(); // ✅ Declare router first
   const { data: session } = useSession();
 
-
   useEffect(() => {
     if (!session) {
       router.push("/login");
