@@ -1,13 +1,14 @@
-import { useSession } from "next-auth/react"
-
+// pages/index.js
+import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
 export default function Home() {
-  const router = useRouter();          // FIRST
-  const { data: session } = useSession();  // SECOND
+  const router = useRouter(); // ✅ Declare router first
+  const { data: session } = useSession();
 
+  // Redirect to login if not logged in
   useEffect(() => {
     if (!session) {
       router.push("/login");
@@ -38,7 +39,6 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: updatedMessages })
       });
-
       const data = await res.json();
 
       setMessages([
@@ -55,18 +55,17 @@ export default function Home() {
     setLoading(false);
   };
 
-  // LOGIN CHECK
+  // Handle send button with login check
   function handleSend() {
     const loggedIn = localStorage.getItem("loggedIn");
-
     if (!loggedIn) {
       router.push("/login");
       return;
     }
-
     sendMessage();
   }
 
+  // Auto-scroll chat
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -82,20 +81,16 @@ export default function Home() {
       </Head>
 
       <div style={styles.container}>
-
         {/* Logo */}
         <img src="/logo.png" alt="Logo" style={styles.logo} />
 
         {/* Services Button */}
         <a href="/services" style={styles.downloadLink}>
-          <button style={styles.downloadButton}>
-            Services
-          </button>
+          <button style={styles.downloadButton}>Services</button>
         </a>
 
         <div style={styles.chatWrapper}>
           <div style={styles.chatContainer} ref={chatRef}>
-
             {messages.length === 0 && (
               <div style={styles.welcomeScreen}>
                 <h1 style={styles.welcomeTitle}>Titanova AI</h1>
@@ -126,7 +121,6 @@ export default function Home() {
                 <TypingDots />
               </div>
             )}
-
           </div>
 
           <div style={styles.inputContainer}>
@@ -142,7 +136,6 @@ export default function Home() {
                 }
               }}
             />
-
             <button style={styles.button} onClick={handleSend}>
               Send
             </button>
@@ -169,7 +162,6 @@ export default function Home() {
           .dot:nth-child(2) { animation-delay: .2s; }
           .dot:nth-child(3) { animation-delay: .4s; }
         `}</style>
-
       </div>
     </>
   );
@@ -191,7 +183,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     backgroundColor: "#0f172a",
-    color: "white",
+    color: "white"
   },
 
   logo: {
@@ -203,7 +195,7 @@ const styles = {
     borderRadius: "50%",
     objectFit: "cover",
     boxShadow: "0 0 10px rgba(0,0,0,0.5)",
-    zIndex: 1000,
+    zIndex: 1000
   },
 
   chatWrapper: {
@@ -211,7 +203,7 @@ const styles = {
     maxWidth: "800px",
     display: "flex",
     flexDirection: "column",
-    height: "100vh",
+    height: "100vh"
   },
 
   chatContainer: {
@@ -220,7 +212,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     padding: "30px 20px",
-    gap: "10px",
+    gap: "10px"
   },
 
   message: {
@@ -230,14 +222,14 @@ const styles = {
     fontSize: "15px",
     lineHeight: "1.5",
     wordBreak: "break-word",
-    whiteSpace: "pre-wrap",
+    whiteSpace: "pre-wrap"
   },
 
   inputContainer: {
     display: "flex",
     padding: "20px",
     borderTop: "1px solid #1e293b",
-    backgroundColor: "#0f172a",
+    backgroundColor: "#0f172a"
   },
 
   textarea: {
@@ -248,7 +240,7 @@ const styles = {
     outline: "none",
     fontSize: "15px",
     marginRight: "10px",
-    resize: "none",
+    resize: "none"
   },
 
   button: {
@@ -257,7 +249,7 @@ const styles = {
     border: "none",
     backgroundColor: "#2563eb",
     color: "white",
-    cursor: "pointer",
+    cursor: "pointer"
   },
 
   welcomeScreen: {
@@ -266,17 +258,17 @@ const styles = {
     left: "50%",
     transform: "translate(-50%, -50%)",
     textAlign: "center",
-    opacity: 0.8,
+    opacity: 0.8
   },
 
   welcomeTitle: {
     fontSize: "32px",
-    marginBottom: "10px",
+    marginBottom: "10px"
   },
 
   welcomeSubtitle: {
     fontSize: "16px",
-    color: "#94a3b8",
+    color: "#94a3b8"
   },
 
   downloadLink: {
@@ -284,7 +276,7 @@ const styles = {
     top: "20px",
     right: "20px",
     zIndex: 1000,
-    textDecoration: "none",
+    textDecoration: "none"
   },
 
   downloadButton: {
@@ -295,6 +287,6 @@ const styles = {
     color: "white",
     cursor: "pointer",
     fontSize: "14px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.4)",
-  },
+    boxShadow: "0 0 10px rgba(0,0,0,0.4)"
+  }
 };
