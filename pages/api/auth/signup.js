@@ -1,26 +1,34 @@
-// pages/api/auth/signup.js
-import { hash } from "bcryptjs";
+import bcrypt from "bcryptjs";
+import fs from "fs";
+import path from "path";
 
-// In a real app, store users in a database!
-let usersDB = []; // Temporary memory storage
+const usersFile = path.join(process.cwd(), "users.json");
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).end();
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ success: false, message: "Missing fields" });
+    return res.status(400).json({ error: "Email and password required" });
   }
 
-  // Check if user exists
-  if (usersDB.find((user) => user.email === email)) {
-    return res.status(400).json({ success: false, message: "Email already used" });
+  let users = [];
+  if (fs.existsSync(usersFile)) {
+    users = JSON.parse(fs.readFileSync(usersFile, "utf8"));
   }
 
-  const hashedPassword = await hash(password, 10);
-  usersDB.push({ email, password: hashedPassword });
+  const existing = users.find(u => u.email === email);
+  if (existing) {
+    return res.status(400).json({ error: "Email already registered" });
+  }
 
-  return res.status(200).json({ success: true });
+  const hashedPassword = await bcrypt.hash(password, 10);
+  users.push({ email, password: hashedPassword });
+
+  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+
+  res.status(200).json({ success: true });
 }
-
