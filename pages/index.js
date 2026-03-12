@@ -1,4 +1,21 @@
 "use client"; // ensure client-side rendering
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAnlY5nZ0jhEf0wnIgwvEqAJFbPFmrIHYI",
+  authDomain: "titanovaai-73e1d.firebaseapp.com",
+  projectId: "titanovaai-73e1d",
+  storageBucket: "titanovaai-73e1d.firebasestorage.app",
+  messagingSenderId: "827299150256",
+  appId: "1:827299150256:web:6dd6e164bab10c03903e75"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 
