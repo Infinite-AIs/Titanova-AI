@@ -1,16 +1,13 @@
-export const dynamic = "force-dynamic";
-"use client"; // must be at the top
+"use client"; // must be first
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
-// ⚡ Disable static prerendering to fix Next.js build errors
-export const dynamic = 'force-dynamic';
+// ⚡ Prevent Next.js from prerendering this page
+export const dynamic = "force-dynamic";
 
 export default function Home() {
-  const router = useRouter();
-  const sessionData = useSession();
+  const sessionData = useSession?.(); // optional chaining to avoid undefined
   const session = sessionData?.data;
 
   const [messages, setMessages] = useState([]);
@@ -19,14 +16,7 @@ export default function Home() {
   const chatRef = useRef(null);
 
   // Wait for session to load on client
-  if (sessionData.status === "loading") return null;
-
-  // Redirect if somehow session is null (optional)
-  useEffect(() => {
-    if (!session) {
-      // user will see login screen below, no need to redirect
-    }
-  }, [session]);
+  if (!sessionData || sessionData.status === "loading") return null;
 
   // IP logger
   useEffect(() => {
@@ -45,19 +35,13 @@ export default function Home() {
       const res = await fetch("/api/nexis", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages })
+        body: JSON.stringify({ messages: updatedMessages }),
       });
       const data = await res.json();
 
-      setMessages([
-        ...updatedMessages,
-        { role: "assistant", content: data.result }
-      ]);
+      setMessages([...updatedMessages, { role: "assistant", content: data.result }]);
     } catch {
-      setMessages([
-        ...updatedMessages,
-        { role: "assistant", content: "Titanova could not respond." }
-      ]);
+      setMessages([...updatedMessages, { role: "assistant", content: "Titanova could not respond." }]);
     }
 
     setLoading(false);
@@ -84,7 +68,7 @@ export default function Home() {
         alignItems: "center",
         flexDirection: "column",
         backgroundColor: "#0f172a",
-        color: "white"
+        color: "white",
       }}>
         <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>Sign in to Titanova</h1>
         <button
@@ -95,7 +79,7 @@ export default function Home() {
             backgroundColor: "#2563eb",
             color: "white",
             cursor: "pointer",
-            fontSize: "16px"
+            fontSize: "16px",
           }}
           onClick={() => signIn("github")}
         >
@@ -138,7 +122,7 @@ export default function Home() {
                   ...styles.message,
                   alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
                   backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
-                  animation: "fadeIn 0.3s ease forwards"
+                  animation: "fadeIn 0.3s ease forwards",
                 }}
               >
                 {msg.content}
@@ -204,7 +188,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     backgroundColor: "#0f172a",
-    color: "white"
+    color: "white",
   },
   logo: {
     position: "fixed",
@@ -215,14 +199,14 @@ const styles = {
     borderRadius: "50%",
     objectFit: "cover",
     boxShadow: "0 0 10px rgba(0,0,0,0.5)",
-    zIndex: 1000
+    zIndex: 1000,
   },
   chatWrapper: {
     width: "100%",
     maxWidth: "800px",
     display: "flex",
     flexDirection: "column",
-    height: "100vh"
+    height: "100vh",
   },
   chatContainer: {
     flex: 1,
@@ -230,7 +214,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     padding: "30px 20px",
-    gap: "10px"
+    gap: "10px",
   },
   message: {
     padding: "12px 16px",
@@ -239,13 +223,13 @@ const styles = {
     fontSize: "15px",
     lineHeight: "1.5",
     wordBreak: "break-word",
-    whiteSpace: "pre-wrap"
+    whiteSpace: "pre-wrap",
   },
   inputContainer: {
     display: "flex",
     padding: "20px",
     borderTop: "1px solid #1e293b",
-    backgroundColor: "#0f172a"
+    backgroundColor: "#0f172a",
   },
   textarea: {
     flex: 1,
@@ -255,7 +239,7 @@ const styles = {
     outline: "none",
     fontSize: "15px",
     marginRight: "10px",
-    resize: "none"
+    resize: "none",
   },
   button: {
     padding: "14px 20px",
@@ -263,7 +247,7 @@ const styles = {
     border: "none",
     backgroundColor: "#2563eb",
     color: "white",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   welcomeScreen: {
     position: "absolute",
@@ -271,22 +255,22 @@ const styles = {
     left: "50%",
     transform: "translate(-50%, -50%)",
     textAlign: "center",
-    opacity: 0.8
+    opacity: 0.8,
   },
   welcomeTitle: {
     fontSize: "32px",
-    marginBottom: "10px"
+    marginBottom: "10px",
   },
   welcomeSubtitle: {
     fontSize: "16px",
-    color: "#94a3b8"
+    color: "#94a3b8",
   },
   downloadLink: {
     position: "fixed",
     top: "20px",
     right: "20px",
     zIndex: 1000,
-    textDecoration: "none"
+    textDecoration: "none",
   },
   downloadButton: {
     padding: "10px 16px",
@@ -296,6 +280,6 @@ const styles = {
     color: "white",
     cursor: "pointer",
     fontSize: "14px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.4)"
-  }
+    boxShadow: "0 0 10px rgba(0,0,0,0.4)",
+  },
 };
