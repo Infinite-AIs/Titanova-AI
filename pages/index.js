@@ -1,18 +1,37 @@
 "use client"; // ensure client-side rendering
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAnlY5nZ0jhEf0wnIgwvEqAJFbPFmrIHYI",
-  authDomain: "titanovaai-73e1d.firebaseapp.com",
-  projectId: "titanovaai-73e1d",
-  storageBucket: "titanovaai-73e1d.firebasestorage.app",
-  messagingSenderId: "827299150256",
-  appId: "1:827299150256:web:6dd6e164bab10c03903e75"
-};
+
+<script type="module">
+  // Import Firebase modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAnlY5nZ0jhEf0wnIgwvEqAJFbPFmrIHYI",
+    authDomain: "titanovaai-73e1d.firebaseapp.com",
+    projectId: "titanovaai-73e1d",
+    storageBucket: "titanovaai-73e1d.firebasestorage.app",
+    messagingSenderId: "827299150256",
+    appId: "1:827299150256:web:6dd6e164bab10c03903e75"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+
+  // Example: Check if user is logged in
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("Logged in as:", user.email);
+    } else {
+      console.log("Not logged in");
+    }
+  });
+
+  // Functions to sign up or log in
+  window.signupUser = (email, password) => createUserWithEmailAndPassword(auth, email, password);
+  window.loginUser = (email, password) => signInWithEmailAndPassword(auth, email, password);
+</script>
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
