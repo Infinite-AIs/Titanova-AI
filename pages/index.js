@@ -193,6 +193,25 @@ function TypingDots() {
 }
 
 const styles = {
+  downloadButton: {
+  padding: "10px 16px",
+  borderRadius: "12px",
+  border: "none",
+  backgroundColor: "#16a34a",
+  color: "white",
+  cursor: "pointer",
+  fontSize: "14px",
+  boxShadow: "0 0 10px rgba(0,0,0,0.4)", // <-- COMMA ADDED
+},
+topRightButtons: {
+  position: "fixed",
+  top: "20px",
+  right: "20px",
+  zIndex: 1000,
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+},
   container: {
     height: "100vh",
     display: "flex",
@@ -304,28 +323,5 @@ const styles = {
     fontSize: "14px",
     boxShadow: "0 0 10px rgba(0,0,0,0.4)"
   }
-  topRightButtons: {
-  position: "fixed",
-  top: "20px",
-  right: "20px",
-  zIndex: 1000,
-  display: "flex",
-  flexDirection: "column",
-  gap: "10px", // space between buttons
-},
-downloadLink: {
-  textDecoration: "none",
-},
-downloadButton: {
-  padding: "10px 16px",
-  borderRadius: "12px",
-  border: "none",
-  backgroundColor: "#16a34a",
-  color: "white",
-  cursor: "pointer",
-  fontSize: "14px",
-  boxShadow: "0 0 10px rgba(0,0,0,0.4)",
-  width: "100px",
-  textAlign: "center",
-}
+
 };
