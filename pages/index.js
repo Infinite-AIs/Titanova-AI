@@ -84,10 +84,25 @@ export default function Home() {
         {/* Logo */}
         <img src="/logo.png" alt="Logo" style={styles.logo} />
 
-        {/* Services Button */}
-        <a href="/services" style={styles.downloadLink}>
-          <button style={styles.downloadButton}>Services</button>
-        </a>
+    <div style={styles.topRightButtons}>
+  <a href="/services" style={styles.downloadLink}>
+    <button type="button" style={styles.downloadButton}>
+      Services
+    </button>
+  </a>
+
+  <a href="/signup" style={styles.downloadLink}>
+    <button type="button" style={styles.downloadButton}>
+      Sign Up
+    </button>
+  </a>
+
+  <a href="/login" style={styles.downloadLink}>
+    <button type="button" style={styles.downloadButton}>
+      Login
+    </button>
+  </a>
+</div>
 
         <div style={styles.chatWrapper}>
           <div style={styles.chatContainer} ref={chatRef}>
