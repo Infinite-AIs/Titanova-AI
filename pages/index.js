@@ -55,16 +55,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Handle send button with login check
-  function handleSend() {
-    const loggedIn = localStorage.getItem("loggedIn");
-    if (!loggedIn) {
-      router.push("/login");
-      return;
-    }
-    sendMessage();
-  }
-
   // Auto-scroll chat
   useEffect(() => {
     if (chatRef.current) {
