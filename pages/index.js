@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-
 export default function Home() {
   const router = useRouter(); // ✅ Declare router first
   const sessionData = useSession();
