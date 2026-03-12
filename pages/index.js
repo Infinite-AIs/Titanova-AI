@@ -1,24 +1,31 @@
-"use client"; // <-- must be at the top
+"use client"; // must be at the top
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
+// ⚡ Disable static prerendering to fix Next.js build errors
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const sessionData = useSession();
+  const session = sessionData?.data;
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
 
-  // Redirect to login if not logged in
+  // Wait for session to load on client
+  if (sessionData.status === "loading") return null;
+
+  // Redirect if somehow session is null (optional)
   useEffect(() => {
     if (!session) {
-      router.push("/login");
+      // user will see login screen below, no need to redirect
     }
-  }, [session, router]);
+  }, [session]);
 
   // IP logger
   useEffect(() => {
@@ -190,16 +197,14 @@ function TypingDots() {
   );
 }
 
-// --- Styles (same as your original) ---
-const styles = 
-{container: {
+const styles = {
+  container: {
     height: "100vh",
     display: "flex",
     justifyContent: "center",
     backgroundColor: "#0f172a",
     color: "white"
   },
-
   logo: {
     position: "fixed",
     top: "20px",
@@ -211,7 +216,6 @@ const styles =
     boxShadow: "0 0 10px rgba(0,0,0,0.5)",
     zIndex: 1000
   },
-
   chatWrapper: {
     width: "100%",
     maxWidth: "800px",
@@ -219,7 +223,6 @@ const styles =
     flexDirection: "column",
     height: "100vh"
   },
-
   chatContainer: {
     flex: 1,
     overflowY: "auto",
@@ -228,7 +231,6 @@ const styles =
     padding: "30px 20px",
     gap: "10px"
   },
-
   message: {
     padding: "12px 16px",
     borderRadius: "18px",
@@ -238,14 +240,12 @@ const styles =
     wordBreak: "break-word",
     whiteSpace: "pre-wrap"
   },
-
   inputContainer: {
     display: "flex",
     padding: "20px",
     borderTop: "1px solid #1e293b",
     backgroundColor: "#0f172a"
   },
-
   textarea: {
     flex: 1,
     padding: "14px",
@@ -256,7 +256,6 @@ const styles =
     marginRight: "10px",
     resize: "none"
   },
-
   button: {
     padding: "14px 20px",
     borderRadius: "14px",
@@ -265,7 +264,6 @@ const styles =
     color: "white",
     cursor: "pointer"
   },
-
   welcomeScreen: {
     position: "absolute",
     top: "40%",
@@ -274,17 +272,14 @@ const styles =
     textAlign: "center",
     opacity: 0.8
   },
-
   welcomeTitle: {
     fontSize: "32px",
     marginBottom: "10px"
   },
-
   welcomeSubtitle: {
     fontSize: "16px",
     color: "#94a3b8"
   },
-
   downloadLink: {
     position: "fixed",
     top: "20px",
@@ -292,7 +287,6 @@ const styles =
     zIndex: 1000,
     textDecoration: "none"
   },
-
   downloadButton: {
     padding: "10px 16px",
     borderRadius: "12px",
