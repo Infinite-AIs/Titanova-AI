@@ -1,13 +1,28 @@
 import NextAuth from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions = {
+// For demo purposes, using an in-memory "database"
+let users = []; // store users here (not persistent!)
+
+export default NextAuth({
   providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const user = users.find(
+          (u) => u.email === credentials.email && u.password === credentials.password
+        );
+        if (user) return { id: user.email, email: user.email };
+        return null;
+      },
     }),
   ],
-};
-
-export default NextAuth(authOptions);
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+});
