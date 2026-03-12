@@ -289,10 +289,6 @@ topRightButtons: {
   },
 
   downloadLink: {
-    position: "fixed",
-    top: "20px",
-    right: "20px",
-    zIndex: 1000,
     textDecoration: "none"
   },
 
