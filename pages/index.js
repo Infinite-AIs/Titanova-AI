@@ -14,12 +14,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
   
-  useEffect(() => {
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session, router]);
-
   // IP logger
   useEffect(() => {
     fetch("/api/log");
@@ -54,15 +48,7 @@ export default function Home() {
 
     setLoading(false);
   };
-// Handle send button with login check
-  function handleSend() {
-    const loggedIn = localStorage.getItem("loggedIn");
-    if (!loggedIn) {
-      router.push("/login");
-      return;
-    }
-    sendMessage();
-  }
+
   // Auto-scroll chat
   useEffect(() => {
     if (chatRef.current) {
@@ -149,7 +135,7 @@ export default function Home() {
                 }
               }}
             />
-            <button style={styles.button} onClick={handleSend}>
+                <button style={styles.button} onClick={handleSend}>
               Send
             </button>
           </div>
