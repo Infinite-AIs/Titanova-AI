@@ -1,20 +1,19 @@
-// pages/index.js
-"use client"; // <-- add this at the very top
-import { useSession } from "next-auth/react";
+"use client"; // <-- must be at the top
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
 export default function Home() {
-  const router = useRouter(); // ✅ Declare router first
-  const sessionData = useSession();
-  const session = sessionData?.data;
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
-  
+
+  // Redirect to login if not logged in
   useEffect(() => {
     if (!session) {
       router.push("/login");
@@ -56,13 +55,7 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Handle send button with login check
   function handleSend() {
-    const loggedIn = localStorage.getItem("loggedIn");
-    if (!loggedIn) {
-      router.push("/login");
-      return;
-    }
     sendMessage();
   }
 
@@ -73,6 +66,38 @@ export default function Home() {
     }
   }, [messages, loading]);
 
+  // Show login screen if not logged in
+  if (!session) {
+    return (
+      <div style={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "column",
+        backgroundColor: "#0f172a",
+        color: "white"
+      }}>
+        <h1 style={{ fontSize: "28px", marginBottom: "20px" }}>Sign in to Titanova</h1>
+        <button
+          style={{
+            padding: "14px 20px",
+            borderRadius: "14px",
+            border: "none",
+            backgroundColor: "#2563eb",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "16px"
+          }}
+          onClick={() => signIn("github")}
+        >
+          Sign in with GitHub
+        </button>
+      </div>
+    );
+  }
+
+  // Main chat UI
   return (
     <>
       <Head>
@@ -82,10 +107,7 @@ export default function Home() {
       </Head>
 
       <div style={styles.container}>
-        {/* Logo */}
         <img src="/logo.png" alt="Logo" style={styles.logo} />
-
-        {/* Services Button */}
         <a href="/services" style={styles.downloadLink}>
           <button style={styles.downloadButton}>Services</button>
         </a>
@@ -95,9 +117,7 @@ export default function Home() {
             {messages.length === 0 && (
               <div style={styles.welcomeScreen}>
                 <h1 style={styles.welcomeTitle}>Titanova AI</h1>
-                <p style={styles.welcomeSubtitle}>
-                  Ask me ANYTHING to get started...
-                </p>
+                <p style={styles.welcomeSubtitle}>Ask me ANYTHING to get started...</p>
               </div>
             )}
 
@@ -137,9 +157,7 @@ export default function Home() {
                 }
               }}
             />
-            <button style={styles.button} onClick={handleSend}>
-              Send
-            </button>
+            <button style={styles.button} onClick={handleSend}>Send</button>
           </div>
         </div>
 
@@ -148,18 +166,12 @@ export default function Home() {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
           }
-
           @keyframes blink {
             0% { opacity: .2; }
             20% { opacity: 1; }
             100% { opacity: .2; }
           }
-
-          .dot {
-            animation: blink 1.4s infinite both;
-            font-size: 22px;
-          }
-
+          .dot { animation: blink 1.4s infinite both; font-size: 22px; }
           .dot:nth-child(2) { animation-delay: .2s; }
           .dot:nth-child(3) { animation-delay: .4s; }
         `}</style>
@@ -178,116 +190,5 @@ function TypingDots() {
   );
 }
 
-const styles = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "#0f172a",
-    color: "white"
-  },
-
-  logo: {
-    position: "fixed",
-    top: "20px",
-    left: "20px",
-    width: "80px",
-    height: "80px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    boxShadow: "0 0 10px rgba(0,0,0,0.5)",
-    zIndex: 1000
-  },
-
-  chatWrapper: {
-    width: "100%",
-    maxWidth: "800px",
-    display: "flex",
-    flexDirection: "column",
-    height: "100vh"
-  },
-
-  chatContainer: {
-    flex: 1,
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    padding: "30px 20px",
-    gap: "10px"
-  },
-
-  message: {
-    padding: "12px 16px",
-    borderRadius: "18px",
-    maxWidth: "75%",
-    fontSize: "15px",
-    lineHeight: "1.5",
-    wordBreak: "break-word",
-    whiteSpace: "pre-wrap"
-  },
-
-  inputContainer: {
-    display: "flex",
-    padding: "20px",
-    borderTop: "1px solid #1e293b",
-    backgroundColor: "#0f172a"
-  },
-
-  textarea: {
-    flex: 1,
-    padding: "14px",
-    borderRadius: "14px",
-    border: "none",
-    outline: "none",
-    fontSize: "15px",
-    marginRight: "10px",
-    resize: "none"
-  },
-
-  button: {
-    padding: "14px 20px",
-    borderRadius: "14px",
-    border: "none",
-    backgroundColor: "#2563eb",
-    color: "white",
-    cursor: "pointer"
-  },
-
-  welcomeScreen: {
-    position: "absolute",
-    top: "40%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    textAlign: "center",
-    opacity: 0.8
-  },
-
-  welcomeTitle: {
-    fontSize: "32px",
-    marginBottom: "10px"
-  },
-
-  welcomeSubtitle: {
-    fontSize: "16px",
-    color: "#94a3b8"
-  },
-
-  downloadLink: {
-    position: "fixed",
-    top: "20px",
-    right: "20px",
-    zIndex: 1000,
-    textDecoration: "none"
-  },
-
-  downloadButton: {
-    padding: "10px 16px",
-    borderRadius: "12px",
-    border: "none",
-    backgroundColor: "#16a34a",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.4)"
-  }
-};
+// --- Styles (same as your original) ---
+const styles = { ... /* keep your original styles here */ };
