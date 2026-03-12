@@ -1,4 +1,5 @@
 "use client"; // <-- add this at the very top
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
