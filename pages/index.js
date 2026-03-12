@@ -191,4 +191,116 @@ function TypingDots() {
 }
 
 // --- Styles (same as your original) ---
-const styles = { ... /* keep your original styles here */ };
+const styles = 
+{container: {
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "#0f172a",
+    color: "white"
+  },
+
+  logo: {
+    position: "fixed",
+    top: "20px",
+    left: "20px",
+    width: "80px",
+    height: "80px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    boxShadow: "0 0 10px rgba(0,0,0,0.5)",
+    zIndex: 1000
+  },
+
+  chatWrapper: {
+    width: "100%",
+    maxWidth: "800px",
+    display: "flex",
+    flexDirection: "column",
+    height: "100vh"
+  },
+
+  chatContainer: {
+    flex: 1,
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column",
+    padding: "30px 20px",
+    gap: "10px"
+  },
+
+  message: {
+    padding: "12px 16px",
+    borderRadius: "18px",
+    maxWidth: "75%",
+    fontSize: "15px",
+    lineHeight: "1.5",
+    wordBreak: "break-word",
+    whiteSpace: "pre-wrap"
+  },
+
+  inputContainer: {
+    display: "flex",
+    padding: "20px",
+    borderTop: "1px solid #1e293b",
+    backgroundColor: "#0f172a"
+  },
+
+  textarea: {
+    flex: 1,
+    padding: "14px",
+    borderRadius: "14px",
+    border: "none",
+    outline: "none",
+    fontSize: "15px",
+    marginRight: "10px",
+    resize: "none"
+  },
+
+  button: {
+    padding: "14px 20px",
+    borderRadius: "14px",
+    border: "none",
+    backgroundColor: "#2563eb",
+    color: "white",
+    cursor: "pointer"
+  },
+
+  welcomeScreen: {
+    position: "absolute",
+    top: "40%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    textAlign: "center",
+    opacity: 0.8
+  },
+
+  welcomeTitle: {
+    fontSize: "32px",
+    marginBottom: "10px"
+  },
+
+  welcomeSubtitle: {
+    fontSize: "16px",
+    color: "#94a3b8"
+  },
+
+  downloadLink: {
+    position: "fixed",
+    top: "20px",
+    right: "20px",
+    zIndex: 1000,
+    textDecoration: "none"
+  },
+
+  downloadButton: {
+    padding: "10px 16px",
+    borderRadius: "12px",
+    border: "none",
+    backgroundColor: "#16a34a",
+    color: "white",
+    cursor: "pointer",
+    fontSize: "14px",
+    boxShadow: "0 0 10px rgba(0,0,0,0.4)"
+  }
+};
