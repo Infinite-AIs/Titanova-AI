@@ -1,6 +1,5 @@
+import clientPromise from "../../../lib/mongodb";
 import bcrypt from "bcryptjs";
-
-let users = []; // simple temporary storage
 
 export default async function handler(req, res) {
 
@@ -12,11 +11,10 @@ export default async function handler(req, res) {
 
     const { username, password } = req.body;
 
-    if (!username || !password) {
-      return res.status(400).json({ error: "Missing username or password" });
-    }
+    const client = await clientPromise;
+    const db = client.db("titanova");
 
-    const existing = users.find(u => u.username === username);
+    const existing = await db.collection("users").findOne({ username });
 
     if (existing) {
       return res.status(400).json({ error: "User already exists" });
@@ -24,15 +22,16 @@ export default async function handler(req, res) {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    users.push({
+    await db.collection("users").insertOne({
       username,
-      password: hashed
+      password: hashed,
+      created: new Date()
     });
 
     res.json({ success: true });
 
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Server error" });
   }
 
