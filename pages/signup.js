@@ -1,60 +1,47 @@
+"use client";
+
 import { useState } from "react";
 import { useRouter } from "next/router";
 
-export default function Signup() {
+let users = []; // same in-memory users
 
-  const router = useRouter();
-  const [username, setUsername] = useState("");
+export default function SignUp() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  async function handleSignup() {
+  const handleSignUp = () => {
+    if (!email || !password) return alert("Enter email and password");
 
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username,
-        password
-      })
-    });
-
-    const data = await res.json();
-
-    if (data.success) {
-      alert("Account created!");
-      router.push("/login");
-    } else {
-      alert(data.error || "Signup failed");
+    // Check if user exists
+    if (users.find((u) => u.email === email)) {
+      return alert("User already exists!");
     }
-  }
+
+    users.push({ email, password });
+    alert("User created! You can now login.");
+    router.push("/login");
+  };
 
   return (
-    <div style={{ padding: 40 }}>
-      <h1>Create Account</h1>
-
+    <div style={{ display: "flex", flexDirection: "column", padding: 50 }}>
+      <h1>Sign Up</h1>
       <input
-        placeholder="Username"
-        value={username}
-        onChange={(e)=>setUsername(e.target.value)}
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{ marginBottom: 10, padding: 8 }}
       />
-
-      <br/><br/>
-
       <input
-        type="password"
         placeholder="Password"
+        type="password"
         value={password}
-        onChange={(e)=>setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{ marginBottom: 10, padding: 8 }}
       />
-
-      <br/><br/>
-
-      <button onClick={handleSignup}>
+      <button onClick={handleSignUp} style={{ padding: 10 }}>
         Sign Up
       </button>
-
     </div>
   );
 }
