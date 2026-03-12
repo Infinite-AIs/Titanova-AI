@@ -124,20 +124,19 @@ export default function Home() {
 
           <div style={styles.inputContainer}>
             <textarea
-              style={styles.textarea}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Message Titanova..."
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-            />
-                <button style={styles.button} onClick={handleSend}>
-              Send
-            </button>
+  style={styles.textarea}
+  value={input}
+  onChange={(e) => setInput(e.target.value)}
+  placeholder="Message Titanova..."
+  onKeyDown={(e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(); // ✅ updated
+    }
+  }}
+/>
+
+<button style={styles.button} onClick={sendMessage}>Send</button> // ✅ updated
           </div>
         </div>
 
