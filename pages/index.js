@@ -19,6 +19,7 @@ export default function Home() {
     );
     setSupabaseClient(supabase);
 
+    
     // Check for active session
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) setUser(data.session.user);
