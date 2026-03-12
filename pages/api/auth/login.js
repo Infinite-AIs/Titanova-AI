@@ -1,30 +1,27 @@
+import clientPromise from "../../../lib/mongodb";
 import bcrypt from "bcryptjs";
-import fs from "fs";
-import path from "path";
-
-const usersFile = path.join(process.cwd(), "users.json");
 
 export default async function handler(req, res) {
+
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).end();
   }
 
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!fs.existsSync(usersFile)) {
-    return res.status(400).json({ error: "No users found. Please sign up first." });
-  }
+  const client = await clientPromise;
+  const db = client.db("titanova");
 
-  const users = JSON.parse(fs.readFileSync(usersFile, "utf8"));
-  const user = users.find(u => u.email === email);
+  const user = await db.collection("users").findOne({ username });
 
   if (!user) {
-    return res.status(400).json({ error: "User not found. Please sign up." });
+    return res.status(400).json({ error: "User not found" });
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    return res.status(400).json({ error: "Incorrect password." });
+  const valid = await bcrypt.compare(password, user.password);
+
+  if (!valid) {
+    return res.status(400).json({ error: "Wrong password" });
   }
 
   res.status(200).json({ success: true });
