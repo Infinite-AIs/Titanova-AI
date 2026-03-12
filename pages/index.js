@@ -136,7 +136,7 @@ export default function Home() {
   }}
 />
 
-<button style={styles.button} onClick={sendMessage}>Send</button> // ✅ updated
+<button style={styles.button} onClick={sendMessage}>Send</button>
           </div>
         </div>
 
