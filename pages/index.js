@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 "use client"; // must be at the top
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
