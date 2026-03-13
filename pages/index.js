@@ -85,18 +85,20 @@ useEffect(() => {
           </a>
         </div>
 
-        {/* Chat */}
-        <div style={{ ...styles.chatWrapper, position: "relative" }}>
-          {/* Welcome Screen */}
-          {messages.length === 0 && (
-            <div style={styles.welcomeScreen}>
-              <h1 style={styles.welcomeTitle}>Titanova AI</h1>
-              <p style={styles.welcomeSubtitle}>Ask me ANYTHING to get started...</p>
-            </div>
-          )}
-
-          {/* Scrollable messages */}
+         <div style={styles.chatWrapper}>
+          {/* Messages Container */}
           <div style={styles.chatContainer} ref={chatRef}>
+            {messages.length === 0 && (
+              <div style={styles.welcomeScreen}>
+                <h1 style={styles.welcomeTitle}>Titanova AI</h1>
+                <p style={styles.welcomeSubtitle}>
+                  Ask me ANYTHING to get started...
+                </p>
+              </div>
+            )}
+
+            <div style={{ flexGrow: 1 }} />
+
             {messages.map((msg, i) => (
               <div
                 key={i}
@@ -104,10 +106,19 @@ useEffect(() => {
                   ...styles.message,
                   alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
                   backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
+                  animation: "fadeIn 0.3s ease forwards",
                 }}
               >
                 {msg.content}
               </div>
+            ))}
+
+            {loading && (
+              <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
+                <TypingDots />
+              </div>
+            )}
+          </div>
             ))}
 
             {loading && (
