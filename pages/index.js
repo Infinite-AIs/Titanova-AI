@@ -157,31 +157,29 @@ async function sendMessage(){
 
   <div style={styles.chat} ref={chatRef}>
 
-{messages.length === 0 && (
-<div style={styles.welcome}>
-<h1>Titanova AI</h1>
-<p>Ask anything to begin</p>
-</div>
-)}
-
-  {messages.map((m,i)=>(
-  <div key={i}
-  style={{
-  ...styles.msg,
-  alignSelf: m.role==="user"?"flex-end":"flex-start",
-  backgroundColor: m.role==="user"?"#2563eb":"#1f2937"
-  }}>
-  {m.content}
-  </div>
-  ))}
-
-  {loading && (
-  <div style={{...styles.msg,background:"#1f2937"}}>
-  Thinking...
-  </div>
+<div style={{ ...styles.chatWrapper, position: "relative" }}>
+  {messages.length === 0 && (
+    <div style={styles.welcomeScreen}>
+      <h1 style={styles.welcomeTitle}>Titanova AI</h1>
+      <p style={styles.welcomeSubtitle}>Ask me ANYTHING to get started...</p>
+    </div>
   )}
 
+  <div style={styles.chatContainer} ref={chatRef}>
+    {messages.map((msg, i) => (
+      <div
+        key={i}
+        style={{
+          ...styles.message,
+          alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+          backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
+        }}
+      >
+        {msg.content}
+      </div>
+    ))}
   </div>
+</div>
 
   {/* input */}
 
