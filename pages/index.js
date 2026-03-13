@@ -43,7 +43,11 @@ export default function Home() {
 
     setLoading(false);
   };
-
+useEffect(() => {
+  if (chatRef.current) {
+    chatRef.current.scrollTop = chatRef.current.scrollHeight; // scroll to bottom
+  }
+}, []); // empty dependency → runs once when loaded
  useEffect(() => {
   if (chatRef.current) {
     chatRef.current.scrollTop = chatRef.current.scrollHeight; // scroll to bottom
