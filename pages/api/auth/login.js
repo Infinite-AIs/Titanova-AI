@@ -1,28 +1,17 @@
-import clientPromise from "../../../lib/mongodb";
-import bcrypt from "bcryptjs";
+import { auth } from "../../../lib/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).end();
 
-  if (req.method !== "POST") {
-    return res.status(405).end();
+  const { email, password } = req.body;
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    res.status(200).json({ success: true, uid: user.uid, email: user.email });
+  } catch (error) {
+    res.status(400).json({ success: false, message: "Invalid credentials!" });
   }
-
-  const { username, password } = req.body;
-
-  const client = await clientPromise;
-  const db = client.db("titanova");
-
-  const user = await db.collection("users").findOne({ username });
-
-  if (!user) {
-    return res.status(400).json({ error: "User not found" });
-  }
-
-  const valid = await bcrypt.compare(password, user.password);
-
-  if (!valid) {
-    return res.status(400).json({ error: "Wrong password" });
-  }
-
-  res.status(200).json({ success: true });
 }
