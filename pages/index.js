@@ -92,7 +92,7 @@ const login = async (email, password) => {
             <button type="button" style={styles.downloadButton}>
               Services
             </button>
-         <button
+  <button
   type="button"
   style={styles.downloadButton}
   onClick={() => {
@@ -115,7 +115,6 @@ const login = async (email, password) => {
 >
   Login
 </button>
-
         {/* Chat */}
 <div style={styles.chatWrapper}>
   {/* Messages Container */}
