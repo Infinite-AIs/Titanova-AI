@@ -263,7 +263,7 @@ const styles = {
   flexDirection: "column-reverse", // <-- changed from column
   padding: "30px 20px",
   gap: "10px",
-}
+},
   message: {
     padding: "12px 16px",
     borderRadius: "18px",
