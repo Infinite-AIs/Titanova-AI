@@ -1,38 +1,17 @@
-import clientPromise from "../../../lib/mongodb";
-import bcrypt from "bcryptjs";
+import { auth } from "../../../lib/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).end();
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  const { email, password } = req.body;
 
   try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-    const { username, password } = req.body;
-
-    const client = await clientPromise;
-    const db = client.db("titanova");
-
-    const existing = await db.collection("users").findOne({ username });
-
-    if (existing) {
-      return res.status(400).json({ error: "User already exists" });
-    }
-
-    const hashed = await bcrypt.hash(password, 10);
-
-    await db.collection("users").insertOne({
-      username,
-      password: hashed,
-      created: new Date()
-    });
-
-    res.json({ success: true });
-
+    res.status(200).json({ success: true, uid: user.uid, email: user.email });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(400).json({ success: false, message: error.message });
   }
-
 }
