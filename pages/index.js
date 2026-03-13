@@ -153,11 +153,8 @@ async function sendMessage(){
 
   {/* chat */}
 
-  <div style={styles.chatWrap}>
-
-  <div style={styles.chat} ref={chatRef}>
-
 <div style={{ ...styles.chatWrapper, position: "relative" }}>
+  {/* Welcome text only when no messages */}
   {messages.length === 0 && (
     <div style={styles.welcomeScreen}>
       <h1 style={styles.welcomeTitle}>Titanova AI</h1>
@@ -165,6 +162,7 @@ async function sendMessage(){
     </div>
   )}
 
+  {/* Scrollable chat */}
   <div style={styles.chatContainer} ref={chatRef}>
     {messages.map((msg, i) => (
       <div
@@ -178,9 +176,14 @@ async function sendMessage(){
         {msg.content}
       </div>
     ))}
+
+    {loading && (
+      <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
+        <TypingDots />
+      </div>
+    )}
   </div>
 </div>
-
   {/* input */}
 
   <div style={styles.inputArea}>
