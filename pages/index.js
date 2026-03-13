@@ -86,35 +86,39 @@ const login = async (email, password) => {
         {/* Floating Logo */}
         <img src="/logo.png" alt="Logo" style={styles.logo} />
 
-        {/* Top Right Buttons */}
-        <div style={styles.topRightButtons}>
-          <a href="/services" style={styles.downloadLink}>
-            <button type="button" style={styles.downloadButton}>
-              Services
-            </button>
+  {/* Top Right Buttons */}
+<div style={styles.topRightButtons}>
   <button
-  type="button"
-  style={styles.downloadButton}
-  onClick={() => {
-    const email = prompt("Enter email for signup:");
-    const password = prompt("Enter password:");
-    signup(email, password);
-  }}
->
-  Sign Up
-</button>
+    type="button"
+    style={styles.downloadButton}
+    onClick={() => router.push("/services")} // navigate to services
+  >
+    Services
+  </button>
 
-<button
-  type="button"
-  style={styles.downloadButton}
-  onClick={() => {
-    const email = prompt("Enter email to login:");
-    const password = prompt("Enter password:");
-    login(email, password);
-  }}
->
-  Login
-</button>
+  <button
+    type="button"
+    style={styles.downloadButton}
+    onClick={() => {
+      const email = prompt("Enter email for signup:");
+      const password = prompt("Enter password:");
+      signup(email, password);
+    }}
+  >
+    Sign Up
+  </button>
+
+  <button
+    type="button"
+    style={styles.downloadButton}
+    onClick={() => {
+      const email = prompt("Enter email to login:");
+      const password = prompt("Enter password:");
+      login(email, password);
+    }}
+  >
+    Login
+  </button>
 </div>
         {/* Chat */}
 <div style={styles.chatWrapper}>
