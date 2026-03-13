@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import Head from "next/head";
-
+import Head from "next/head"; import { db } from "../lib/firebase"; // Firestore instance
+import { collection, addDoc, query, orderBy, getDocs } from "firebase/firestore";
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -13,33 +13,54 @@ export default function Home() {
     fetch("/api/log");
   }, []);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+const sendMessage = async () => {
+  if (!input.trim()) return;
 
-    const updatedMessages = [...messages, { role: "user", content: input }];
-    setMessages(updatedMessages);
-    setInput("");
-    setLoading(true);
+  const updatedMessages = [...messages, { role: "user", content: input }];
+  setMessages(updatedMessages);
+  setInput("");
+  setLoading(true);
 
-    try {
-      const res = await fetch("/api/nexis", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages })
-      });
+  try {
+    const res = await fetch("/api/nexis", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: updatedMessages }),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      setMessages([
-        ...updatedMessages,
-        { role: "assistant", content: data.result }
-      ]);
-    } catch {
-      setMessages([
-        ...updatedMessages,
-        { role: "assistant", content: "Titanova could not respond." }
-      ]);
+    const assistantMessage = { role: "assistant", content: data.result };
+
+    setMessages([...updatedMessages, assistantMessage]);
+
+    // Save user and assistant messages to Firestore
+    const userId = session?.user?.uid; // from Firebase Auth
+    if (userId) {
+      const chatRef = collection(db, "users", userId, "chats");
+      await addDoc(chatRef, { role: "user", content: input, timestamp: new Date() });
+      await addDoc(chatRef, { role: "assistant", content: data.result, timestamp: new Date() });
     }
+  } catch (err) {
+    console.error(err);
+    setMessages([
+      ...updatedMessages,
+      { role: "assistant", content: "Titanova could not respond." },
+    ]);
+  }
+useEffect(() => {
+  const fetchMessages = async () => {
+    if (!session?.user?.uid) return;
+    const chatRef = collection(db, "users", session.user.uid, "chats");
+    const q = query(chatRef, orderBy("timestamp"));
+    const snapshot = await getDocs(q);
+    const msgs = snapshot.docs.map(doc => doc.data());
+    setMessages(msgs);
+  };
+  fetchMessages();
+}, [session]);
+  setLoading(false);
+};
 
     setLoading(false);
   };
