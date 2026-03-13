@@ -2,59 +2,38 @@
 import { useState, useRef, useEffect } from "react";
 import Head from "next/head";
 
-// Dummy user management for demo
-let users = {}; // { email: [{role, content}, ...] }
-let currentUser = null;
-
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
 
-  // Load messages for the current user
+  // 👇 IP logger
   useEffect(() => {
-    if (currentUser && users[currentUser]) {
-      setMessages(users[currentUser]);
-    } else {
-      setMessages([]);
-    }
+    fetch("/api/log");
   }, []);
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  }, [messages, loading]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const updatedMessages = [
-      ...messages,
-      { role: "user", content: input }
-    ];
-
+    const updatedMessages = [...messages, { role: "user", content: input }];
     setMessages(updatedMessages);
     setInput("");
     setLoading(true);
 
     try {
-      // Simulate AI response
-      const res = await new Promise((resolve) =>
-        setTimeout(() => resolve({ result: "Hello! I got: " + input }), 1000)
-      );
+      const res = await fetch("/api/nexis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: updatedMessages })
+      });
 
-      const newMessages = [
+      const data = await res.json();
+
+      setMessages([
         ...updatedMessages,
-        { role: "assistant", content: res.result }
-      ];
-
-      setMessages(newMessages);
-
-      // Save per-user messages
-      if (currentUser) users[currentUser] = newMessages;
+        { role: "assistant", content: data.result }
+      ]);
     } catch {
       setMessages([
         ...updatedMessages,
@@ -65,91 +44,69 @@ export default function Home() {
     setLoading(false);
   };
 
-  const signup = (email, password) => {
-    if (users[email]) {
-      alert("User already exists!");
-      return;
+  // Auto-scroll chat to bottom
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-    users[email] = [];
-    currentUser = email;
-    setMessages([]);
-    alert("Signed up and logged in as " + email);
-  };
-
-  const login = (email, password) => {
-    if (!users[email]) {
-      alert("Invalid credentials!");
-      return;
-    }
-    currentUser = email;
-    setMessages(users[email]);
-    alert("Logged in as " + email);
-  };
+  }, [messages, loading]);
 
   return (
     <>
       <Head>
         <title>Titanova</title>
+        <meta name="description" content="Ask Titanova AI anything." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div style={styles.container}>
-        {/* Logo */}
+        {/* Floating Logo */}
         <img src="/logo.png" alt="Logo" style={styles.logo} />
 
         {/* Top Right Buttons */}
         <div style={styles.topRightButtons}>
           <a href="/services" style={styles.downloadLink}>
-            <button style={styles.downloadButton}>Services</button>
+            <button type="button" style={styles.downloadButton}>
+              Services
+            </button>
           </a>
-
-          <button
-            style={styles.downloadButton}
-            onClick={() => {
-              const email = prompt("Enter email for signup:");
-              const password = prompt("Enter password:");
-              signup(email, password);
-            }}
-          >
-            Sign Up
-          </button>
-
-          <button
-            style={styles.downloadButton}
-            onClick={() => {
-              const email = prompt("Enter email to login:");
-              const password = prompt("Enter password:");
-              login(email, password);
-            }}
-          >
-            Login
-          </button>
+          <a href="/signup" style={styles.downloadLink}>
+            <button type="button" style={styles.downloadButton}>
+              Sign Up
+            </button>
+          </a>
+          <a href="/login" style={styles.downloadLink}>
+            <button type="button" style={styles.downloadButton}>
+              Login
+            </button>
+          </a>
         </div>
 
         {/* Chat */}
-        <div style={styles.chatWrapper}>
+        <div style={{ ...styles.chatWrapper, position: "relative" }}>
+          {/* Welcome Screen */}
+          {messages.length === 0 && (
+            <div style={styles.welcomeScreen}>
+              <h1 style={styles.welcomeTitle}>Titanova AI</h1>
+              <p style={styles.welcomeSubtitle}>Ask me ANYTHING to get started...</p>
+            </div>
+          )}
+
+          {/* Scrollable messages */}
           <div style={styles.chatContainer} ref={chatRef}>
-            {messages.length === 0 && (
-              <div style={styles.welcomeScreen}>
-                <h1 style={styles.welcomeTitle}>Titanova AI</h1>
-                <p style={styles.welcomeSubtitle}>
-                  Ask me ANYTHING to get started...
-                </p>
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                style={{
+                  ...styles.message,
+                  alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+                  backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
+                }}
+              >
+                {msg.content}
               </div>
-            )}
-{[...messages].reverse().map((msg, i) => (
-  <div
-    key={i}
-    style={{
-      ...styles.message,
-      alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-      backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
-      animation: "fadeIn 0.3s ease forwards",
-    }}
-  >
-    {msg.content}
-  </div>
-))}
+            ))}
+
             {loading && (
               <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
                 <TypingDots />
@@ -157,6 +114,7 @@ export default function Home() {
             )}
           </div>
 
+          {/* Input */}
           <div style={styles.inputContainer}>
             <textarea
               style={styles.textarea}
@@ -181,15 +139,18 @@ export default function Home() {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
           }
+
           @keyframes blink {
             0% { opacity: .2; }
             20% { opacity: 1; }
             100% { opacity: .2; }
           }
+
           .dot {
             animation: blink 1.4s infinite both;
             font-size: 22px;
           }
+
           .dot:nth-child(2) { animation-delay: .2s; }
           .dot:nth-child(3) { animation-delay: .4s; }
         `}</style>
@@ -236,6 +197,9 @@ const styles = {
     flexDirection: "column",
     gap: "10px",
   },
+  downloadLink: {
+    textDecoration: "none",
+  },
   downloadButton: {
     padding: "10px 16px",
     borderRadius: "12px",
@@ -246,9 +210,6 @@ const styles = {
     fontSize: "14px",
     boxShadow: "0 0 10px rgba(0,0,0,0.4)",
   },
-  downloadLink: {
-    textDecoration: "none",
-  },
   chatWrapper: {
     width: "100%",
     maxWidth: "800px",
@@ -256,14 +217,14 @@ const styles = {
     flexDirection: "column",
     height: "100vh",
   },
- chatContainer: {
-  flex: 1,
-  overflowY: "auto",
-  display: "flex",
-  flexDirection: "column-reverse", // <-- changed from column
-  padding: "30px 20px",
-  gap: "10px",
-},
+  chatContainer: {
+    flex: 1,
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column-reverse", // 👈 newest messages at bottom
+    padding: "30px 20px",
+    gap: "10px",
+  },
   message: {
     padding: "12px 16px",
     borderRadius: "18px",
