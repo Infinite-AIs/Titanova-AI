@@ -300,8 +300,12 @@ cursor:"pointer"
 },
 
 welcome:{
+position:"absolute",
+top:"50%",
+left:"50%",
+transform:"translate(-50%, -50%)",
 textAlign:"center",
-marginTop:"30%"
+opacity:0.8
 }
 
 };
