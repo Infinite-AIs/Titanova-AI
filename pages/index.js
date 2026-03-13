@@ -115,7 +115,6 @@ const login = async (email, password) => {
 >
   Login
 </button>
-        </div>
 
         {/* Chat */}
 <div style={styles.chatWrapper}>
