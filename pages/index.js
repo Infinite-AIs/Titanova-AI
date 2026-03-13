@@ -164,6 +164,13 @@ async function sendMessage(){
   </div>
   )}
 
+{messages.length === 0 && (
+<div style={styles.welcome}>
+<h1>Titanova AI</h1>
+<p>Ask anything to begin</p>
+</div>
+)}
+
   {messages.map((m,i)=>(
   <div key={i}
   style={{
@@ -264,6 +271,7 @@ flex:1,
 overflowY:"auto",
 display:"flex",
 flexDirection:"column",
+justifyContent:"flex-end",
 gap:"10px",
 padding:"30px"
 },
