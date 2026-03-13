@@ -137,21 +137,19 @@ export default function Home() {
                 </p>
               </div>
             )}
-
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                style={{
-                  ...styles.message,
-                  alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                  backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
-                  animation: "fadeIn 0.3s ease forwards",
-                }}
-              >
-                {msg.content}
-              </div>
-            ))}
-
+{[...messages].reverse().map((msg, i) => (
+  <div
+    key={i}
+    style={{
+      ...styles.message,
+      alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+      backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
+      animation: "fadeIn 0.3s ease forwards",
+    }}
+  >
+    {msg.content}
+  </div>
+))}
             {loading && (
               <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
                 <TypingDots />
@@ -258,14 +256,14 @@ const styles = {
     flexDirection: "column",
     height: "100vh",
   },
-  chatContainer: {
-    flex: 1,
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    padding: "30px 20px",
-    gap: "10px",
-  },
+ chatContainer: {
+  flex: 1,
+  overflowY: "auto",
+  display: "flex",
+  flexDirection: "column-reverse", // <-- changed from column
+  padding: "30px 20px",
+  gap: "10px",
+}
   message: {
     padding: "12px 16px",
     borderRadius: "18px",
