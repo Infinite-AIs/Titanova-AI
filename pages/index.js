@@ -157,12 +157,12 @@ async function sendMessage(){
 
   <div style={styles.chat} ref={chatRef}>
 
-  {messages.length===0 && (
-  <div style={styles.welcome}>
-  <h1>Titanova AI</h1>
-  <p>Ask anything to begin</p>
-  </div>
-  )}
+{messages.length === 0 && (
+<div style={styles.welcome}>
+<h1>Titanova AI</h1>
+<p>Ask anything to begin</p>
+</div>
+)}
 
   {messages.map((m,i)=>(
   <div key={i}
