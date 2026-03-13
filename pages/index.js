@@ -85,69 +85,62 @@ useEffect(() => {
           </a>
         </div>
 
-         {/* Chat */}
-        <div style={styles.chatWrapper}>
-          {/* Messages Container */}
-          <div style={styles.chatContainer} ref={chatRef}>
-            {messages.length === 0 && (
-              <div style={styles.welcomeScreen}>
-                <h1 style={styles.welcomeTitle}>Titanova AI</h1>
-                <p style={styles.welcomeSubtitle}>
-                  Ask me ANYTHING to get started...
-                </p>
-              </div>
-            )}
+        {/* Chat */}
+<div style={styles.chatWrapper}>
+  {/* Messages Container */}
+  <div style={styles.chatContainer} ref={chatRef}>
+    {messages.length === 0 && (
+      <div style={styles.welcomeScreen}>
+        <h1 style={styles.welcomeTitle}>Titanova AI</h1>
+        <p style={styles.welcomeSubtitle}>
+          Ask me ANYTHING to get started...
+        </p>
+      </div>
+    )}
 
-            <div style={{ flexGrow: 1 }} />
+    {/* Push content to bottom */}
+    <div style={{ flexGrow: 1 }} />
 
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                style={{
-                  ...styles.message,
-                  alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
-                  backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
-                  animation: "fadeIn 0.3s ease forwards",
-                }}
-              >
-                {msg.content}
-              </div>
-            ))}
+    {messages.map((msg, i) => (
+      <div
+        key={i}
+        style={{
+          ...styles.message,
+          alignSelf: msg.role === "user" ? "flex-end" : "flex-start",
+          backgroundColor: msg.role === "user" ? "#2563eb" : "#1f2937",
+          animation: "fadeIn 0.3s ease forwards",
+        }}
+      >
+        {msg.content}
+      </div>
+    ))}
 
-            {loading && (
-              <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
-                <TypingDots />
-              </div>
-            )}
-          </div>
-            ))}
+    {loading && (
+      <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
+        <TypingDots />
+      </div>
+    )}
+  </div>
 
-            {loading && (
-              <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
-                <TypingDots />
-              </div>
-            )}
-          </div>
-
-          {/* Input */}
-          <div style={styles.inputContainer}>
-            <textarea
-              style={styles.textarea}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Message Titanova..."
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  sendMessage();
-                }
-              }}
-            />
-            <button style={styles.button} onClick={sendMessage}>
-              Send
-            </button>
-          </div>
-        </div>
+  {/* Input */}
+  <div style={styles.inputContainer}>
+    <textarea
+      style={styles.textarea}
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      placeholder="Message Titanova..."
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      }}
+    />
+    <button style={styles.button} onClick={sendMessage}>
+      Send
+    </button>
+  </div>
+</div>
 
         <style>{`
           @keyframes fadeIn {
