@@ -154,7 +154,7 @@ async function sendMessage(){
   {/* chat */}
 
 <div style={{ ...styles.chatWrapper, position: "relative" }}>
-  {/* Welcome text only when no messages */}
+  {/* Welcome text */}
   {messages.length === 0 && (
     <div style={styles.welcomeScreen}>
       <h1 style={styles.welcomeTitle}>Titanova AI</h1>
@@ -183,7 +183,27 @@ async function sendMessage(){
       </div>
     )}
   </div>
+
+  {/* Chat input */}
+  <div style={styles.inputContainer}>
+    <textarea
+      style={styles.textarea}
+      value={input}
+      onChange={(e) => setInput(e.target.value)}
+      placeholder="Message Titanova..."
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      }}
+    />
+    <button style={styles.button} onClick={sendMessage}>
+      Send
+    </button>
+  </div>
 </div>
+
   {/* input */}
 
   <div style={styles.inputArea}>
