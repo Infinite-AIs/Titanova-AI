@@ -236,7 +236,7 @@ const styles = {
   downloadLink: { textDecoration: "none" },
   downloadButton: { padding: "10px 16px", borderRadius: "12px", border: "none", backgroundColor: "#16a34a", color: "white", cursor: "pointer", fontSize: "14px", boxShadow: "0 0 10px rgba(0,0,0,0.4)" },
   chatContainer: { flex: 1, overflowY: "auto", display: "flex", flexDirection: "column-reverse", padding: "30px 20px", gap: "10px" },
-  chatContainer: { flex: 1, overflowY: "auto", display: "flex", flexDirection: "column-reverse", padding: "30px 20px", gap: "10px" },
+  chatWrapper: { width: "100%", maxWidth: "800px", display: "flex", flexDirection: "column", height: "100vh" },
   message: { padding: "12px 16px", borderRadius: "18px", maxWidth: "75%", fontSize: "15px", lineHeight: "1.5", wordBreak: "break-word", whiteSpace: "pre-wrap" },
   inputContainer: { display: "flex", padding: "20px", borderTop: "1px solid #1e293b", backgroundColor: "#0f172a" },
   textarea: { flex: 1, padding: "14px", borderRadius: "14px", border: "none", outline: "none", fontSize: "15px", marginRight: "10px", resize: "none" },
