@@ -111,7 +111,6 @@ useEffect(() => {
               >
                 {msg.content}
               </div>
-            ))}
 
             {loading && (
               <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
