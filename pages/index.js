@@ -221,7 +221,7 @@ const styles = {
     flex: 1,
     overflowY: "auto",
     display: "flex",
-    flexDirection: "column-reverse", // 👈 newest messages at bottom
+    flexDirection: "column",
     padding: "30px 20px",
     gap: "10px",
   },
