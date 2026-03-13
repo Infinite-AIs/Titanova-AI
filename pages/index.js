@@ -53,7 +53,27 @@ useEffect(() => {
     chatRef.current.scrollTop = chatRef.current.scrollHeight; // scroll to bottom
   }
   }, [messages, loading]);
+  const signup = async (email, password) => {
+  const res = await fetch("/api/auth/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+  const data = await res.json();
+  if (data.success) alert("Account created! You can now log in.");
+  else alert("Signup failed: " + data.message);
+};
 
+const login = async (email, password) => {
+  const res = await fetch("/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+  const data = await res.json();
+  if (data.success) alert("Logged in!");
+  else alert("Login failed: " + data.message);
+};
   return (
     <>
       <Head>
@@ -72,17 +92,29 @@ useEffect(() => {
             <button type="button" style={styles.downloadButton}>
               Services
             </button>
-          </a>
-          <a href="/signup" style={styles.downloadLink}>
-            <button type="button" style={styles.downloadButton}>
-              Sign Up
-            </button>
-          </a>
-          <a href="/login" style={styles.downloadLink}>
-            <button type="button" style={styles.downloadButton}>
-              Login
-            </button>
-          </a>
+         <button
+  type="button"
+  style={styles.downloadButton}
+  onClick={() => {
+    const email = prompt("Enter email for signup:");
+    const password = prompt("Enter password:");
+    signup(email, password);
+  }}
+>
+  Sign Up
+</button>
+
+<button
+  type="button"
+  style={styles.downloadButton}
+  onClick={() => {
+    const email = prompt("Enter email to login:");
+    const password = prompt("Enter password:");
+    login(email, password);
+  }}
+>
+  Login
+</button>
         </div>
 
         {/* Chat */}
