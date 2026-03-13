@@ -85,7 +85,8 @@ useEffect(() => {
           </a>
         </div>
 
-         <div style={styles.chatWrapper}>
+         {/* Chat */}
+        <div style={styles.chatWrapper}>
           {/* Messages Container */}
           <div style={styles.chatContainer} ref={chatRef}>
             {messages.length === 0 && (
@@ -111,6 +112,7 @@ useEffect(() => {
               >
                 {msg.content}
               </div>
+            ))}
 
             {loading && (
               <div style={{ ...styles.message, backgroundColor: "#1f2937" }}>
