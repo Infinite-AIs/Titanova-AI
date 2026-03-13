@@ -7,11 +7,29 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatRef = useRef(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // Load current user from localStorage
+  useEffect(() => {
+    const user = localStorage.getItem("currentUser");
+    if (user) {
+      setCurrentUser(user);
+      const savedMessages = JSON.parse(localStorage.getItem(`messages_${user}`) || "[]");
+      setMessages(savedMessages);
+    }
+  }, []);
 
   // 👇 IP logger
   useEffect(() => {
     fetch("/api/log");
   }, []);
+
+  // Save messages per user
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem(`messages_${currentUser}`, JSON.stringify(messages));
+    }
+  }, [messages, currentUser]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -51,6 +69,26 @@ export default function Home() {
     }
   }, [messages, loading]);
 
+  // Signup/Login helpers
+  const signup = (email, password) => {
+    if (!email || !password) return alert("Please enter both email and password.");
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    if (users[email]) return alert("Account already exists!");
+    users[email] = { password };
+    localStorage.setItem("users", JSON.stringify(users));
+    alert("Signup successful! You can now login.");
+  };
+
+  const login = (email, password) => {
+    const users = JSON.parse(localStorage.getItem("users") || "{}");
+    if (!users[email] || users[email].password !== password) return alert("Invalid credentials!");
+    localStorage.setItem("currentUser", email);
+    setCurrentUser(email);
+    const savedMessages = JSON.parse(localStorage.getItem(`messages_${email}`) || "[]");
+    setMessages(savedMessages);
+    alert(`Logged in as ${email}`);
+  };
+
   return (
     <>
       <Head>
@@ -70,16 +108,30 @@ export default function Home() {
               Services
             </button>
           </a>
-          <a href="/signup" style={styles.downloadLink}>
-            <button type="button" style={styles.downloadButton}>
-              Sign Up
-            </button>
-          </a>
-          <a href="/login" style={styles.downloadLink}>
-            <button type="button" style={styles.downloadButton}>
-              Login
-            </button>
-          </a>
+
+          <button
+            type="button"
+            style={styles.downloadButton}
+            onClick={() => {
+              const email = prompt("Enter email for signup:");
+              const password = prompt("Enter password:");
+              signup(email, password);
+            }}
+          >
+            Sign Up
+          </button>
+
+          <button
+            type="button"
+            style={styles.downloadButton}
+            onClick={() => {
+              const email = prompt("Enter email to login:");
+              const password = prompt("Enter password:");
+              login(email, password);
+            }}
+          >
+            Login
+          </button>
         </div>
 
         {/* Chat */}
@@ -169,6 +221,7 @@ function TypingDots() {
   );
 }
 
+// === STYLES ===
 const styles = {
   container: {
     height: "100vh",
@@ -197,9 +250,7 @@ const styles = {
     flexDirection: "column",
     gap: "10px",
   },
-  downloadLink: {
-    textDecoration: "none",
-  },
+  downloadLink: { textDecoration: "none" },
   downloadButton: {
     padding: "10px 16px",
     borderRadius: "12px",
@@ -221,7 +272,7 @@ const styles = {
     flex: 1,
     overflowY: "auto",
     display: "flex",
-    flexDirection: "column-reverse", // 👈 newest messages at bottom
+    flexDirection: "column-reverse",
     padding: "30px 20px",
     gap: "10px",
   },
@@ -266,12 +317,6 @@ const styles = {
     textAlign: "center",
     opacity: 0.8,
   },
-  welcomeTitle: {
-    fontSize: "32px",
-    marginBottom: "10px",
-  },
-  welcomeSubtitle: {
-    fontSize: "16px",
-    color: "#94a3b8",
-  },
+  welcomeTitle: { fontSize: "32px", marginBottom: "10px" },
+  welcomeSubtitle: { fontSize: "16px", color: "#94a3b8" },
 };
