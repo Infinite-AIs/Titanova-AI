@@ -50,15 +50,9 @@ export default function Home() {
     }
   },[messages,loading]);
 
-  /* send message */
-  async function sendMessage(){
+async function sendMessage(){
 
-    if(!user){
-      alert("Login to chat");
-      return;
-    }
-
-    if(!input.trim()) return;
+  if(!input.trim()) return;
 
     const updated = [...messages,{role:"user",content:input}];
     setMessages(updated);
