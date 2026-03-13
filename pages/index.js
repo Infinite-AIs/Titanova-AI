@@ -44,11 +44,10 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Auto-scroll chat to bottom
-  useEffect(() => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
+ useEffect(() => {
+  if (chatRef.current) {
+    chatRef.current.scrollTop = chatRef.current.scrollHeight; // scroll to bottom
+  }
   }, [messages, loading]);
 
   return (
@@ -217,14 +216,14 @@ const styles = {
     flexDirection: "column",
     height: "100vh",
   },
-  chatContainer: {
-    flex: 1,
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    padding: "30px 20px",
-    gap: "10px",
-  },
+ chatContainer: {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  padding: "30px 20px",
+  gap: "10px",
+  overflowY: "auto",
+},
   message: {
     padding: "12px 16px",
     borderRadius: "18px",
