@@ -217,11 +217,10 @@ export default function Home() {
                 }
               }}
             />
-            <button style={styles.button} onClick={sendMessage}>
-  Send
-</button>
-
-          </div>
+                <button style={styles.button} onClick={sendMessage}>
+                Send
+                </button>
+                </div>
         </div>
       </div>
 
