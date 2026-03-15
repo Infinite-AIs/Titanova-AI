@@ -216,6 +216,7 @@ export default function Home() {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
+    console.log("Send pressed");
   }
 }}
             />
