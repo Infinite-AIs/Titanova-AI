@@ -73,27 +73,42 @@ export default function Home() {
 
   // === Chat functions ===
   const sendMessage = async () => {
-    if (!input.trim() || !currentUser || !currentChatId) return;
+  if (!input.trim() || !currentUser) return;
 
-    const updatedMessages = [...messages, { role: "user", content: input }];
-    setMessages(updatedMessages);
-    setInput("");
-    setLoading(true);
+  // 👇 create a chat automatically if none exists
+  if (!currentChatId) {
+    createNewChat();
+    return;
+  }
 
-    try {
-      const res = await fetch("/api/nexis", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: updatedMessages }),
-      });
-      const data = await res.json();
-      setMessages([...updatedMessages, { role: "assistant", content: data.result }]);
-    } catch {
-      setMessages([...updatedMessages, { role: "assistant", content: "Titanova could not respond." }]);
-    }
+  const updatedMessages = [...messages, { role: "user", content: input }];
+  setMessages(updatedMessages);
+  setInput("");
+  setLoading(true);
 
-    setLoading(false);
-  };
+  try {
+    const res = await fetch("/api/nexis", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: updatedMessages }),
+    });
+
+    const data = await res.json();
+
+    setMessages([
+      ...updatedMessages,
+      { role: "assistant", content: data.result },
+    ]);
+  } catch {
+    setMessages([
+      ...updatedMessages,
+      { role: "assistant", content: "Titanova could not respond." },
+    ]);
+  }
+
+  setLoading(false);
+};
+
 
   const createNewChat = () => {
     if (!currentUser) return;
