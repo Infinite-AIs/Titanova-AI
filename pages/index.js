@@ -27,13 +27,15 @@ export default function Home() {
 
   // Save messages to current chat
   useEffect(() => {
-    if (!currentUser || !currentChatId) return;
-    const updatedChats = chats.map((chat) =>
-      chat.id === currentChatId ? { ...chat, messages } : chat
-    );
-    setChats(updatedChats);
-    localStorage.setItem(`chats_${currentUser}`, JSON.stringify(updatedChats));
-  }, [messages, currentChatId, chats, currentUser]);
+  if (!currentUser || !currentChatId) return;
+
+  const updatedChats = chats.map((chat) =>
+    chat.id === currentChatId ? { ...chat, messages } : chat
+  );
+
+  localStorage.setItem(`chats_${currentUser}`, JSON.stringify(updatedChats));
+
+}, [messages]);
 
   // Auto-scroll chat
   useEffect(() => {
@@ -211,15 +213,15 @@ export default function Home() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Message Titanova..."
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  sendMessage();
-                }
-              }}
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}}
             />
                 <button style={styles.button} onClick={sendMessage}>
-                Send
-                </button>
+  Send
+</button>
                 </div>
         </div>
       </div>
